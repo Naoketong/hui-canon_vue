@@ -1,25 +1,14 @@
 <template>
     <Layout>
         <div class="pg-main-header">
-        <el-button type="primary" @click="handleAddUser">添加用户</el-button>
+        <el-button type="primary" @click="handleAddUser">添加车型</el-button>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form >
             <el-form-item label="车名" label-width="60px">
               <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
             </el-form-item>
-            <el-form-item label="级别" label-width="60px">
-
-            <!--<template>
-                <el-select v-model="value" placeholder="请选择">
-                    <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                </template>-->
-                <el-select v-model="value">
+            <el-form-item label="级别" label-width="60px">          
+                <el-select v-model="formBoxValue.level">
                     <el-option label="经济型" :value="0" />
                     <el-option label="SUV" :value="1" />
                     <el-option label="中级车" :value="2" />
@@ -29,10 +18,10 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="价格" label-width="60px">
-              <el-input type="car_id" name="car_id" width="200" v-model="formBoxValue.car_id"></el-input>
+              <el-input type="price" name="price" width="200" v-model="formBoxValue.price"></el-input>
             </el-form-item>
             <el-form-item label="状态" label-width="60px">
-                <el-select v-model="car_state">
+                <el-select v-model="formBoxValue.state">
                     <el-option label="空闲" :value="0" />
                     <el-option label="租出" :value="1" />
                     <el-option label="维修保养" :value="2" />
@@ -40,23 +29,22 @@
             </el-form-item>
 
 
-            <el-form-item label="图片" label-width="60px">
+            <el-form-item label="上传文件" prop="file_id">
                 <el-upload
                     class="upload-demo"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
+                    ref="upload"
+                    action=""
+                    :limit="1"
+                    :before-upload="handleBeforeUpload"
+                    :on-preview="handleOnPreview"
+                    :on-remove="handleBeforeRemove"
                     :file-list="fileList"
                     list-type="picture">
                     <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，一次只能一张，且不超过500kb</div>
+                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                 </el-upload>
-            </el-form-item>
-
-
-
-
-           
+                          
+            </el-form-item>          
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="handleSave">保存</el-button>
@@ -69,10 +57,7 @@
           :data="vehicleData"
           size="small"
           style="width: 100%">
-          <el-table-column
-            prop="id"
-            label="车型id">
-          </el-table-column>
+         
           <el-table-column
             prop="car_img"
             label="图片">
@@ -126,6 +111,9 @@
           </el-table-column>
         </el-table>
       </div>
+
+
+
     </Layout>
   
 
@@ -133,10 +121,12 @@
 <script>
     import Layout from '@/components/Layout'
     import vehicleModel from '@/models/vehicle.js'
+    import qiniuService from "@/models/qiniu.js"
     export default {
         data() {
             return{
-                fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
+                fileList:[],
+                car_img:'',
                 vehicleData:[],
                 dataIndex: null,
                 formBoxID: null,
@@ -144,134 +134,164 @@
                 formBoxTitle: '',
                 formBoxValue: {
                     name: '',
-                    car_id: '',
-                    phone: '',
+                    price: '',
+                    state: '',
+                    level: '',
                 },
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                    }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                    }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                    }, {
-                    value: '选项4',
-                    label: '龙须面'
-                    }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                    }],
-                value: '',
-                car_state:'',
+                formData:{
+                    file_id:'',
+                },
+                uploadLimit:{
+                    size:2048,
+                },
+                
+                
+                btnloading:false,
             }
         },
         created () {
             vehicleModel.list().then( res => {
             this.vehicleData = res.data;
-            // console.log(this.vehicleData)
             })
+            
         },
         methods: {
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
+            handleOnPreview(file) {
+                window.open(file.url);
             },
-            handlePreview(file) {
-                console.log(file);
+            handleBeforeRemove(file) {
+                if (file && file.status === 'success') {
+                this.fileList = [];
+                this.formData.file_id = '';
+                }
+            },
+            handleBeforeUpload(file) {
+                if (!file || !this.validateSize(file)) {
+                return false;
+                }
+                this.btnloading = true;
+                qiniuService.upload(file).then(res => {
+                    this.car_img = res;
+                this.fileList = [{ name: '上传成功', url: res }];
+                this.formData.file_id = res.id;
+                }).finally(() => {
+                this.btnloading = false;
+                });
+                return false;
+            },
+            // 验证大小
+            validateSize(file) {
+                const size = this.uploadLimit * 1024 * 1024;
+                const fileName = file.name;
+                const suffix = fileName.split('.').pop();
+                const imageRegex = /(jpeg|png|jpg)/;
+                if (file.size > size || !imageRegex.test(suffix)) {
+                this.$message.error(`请上传不大于 ${this.uploadLimit}MB 且格式为zip、rar 的文件`);
+                return false;
+                }
+                return true;          
             },
 
 
 
 
             handleAddUser() {
-            this.formBoxShow = true;
-            this.formBoxTitle = '添加车型';
-            this.formBoxID = '';
-            this.formBoxValue.name = '';
-            this.formBoxValue.car_id = '';
-            this.formBoxValue.phone = '';
+                this.formBoxShow = true;
+                this.formBoxTitle = '添加车型';
+                this.formBoxID = '';
+                this.formBoxValue.name = '';
+                this.formBoxValue.price = '';
+                this.formBoxValue.state = '';
+                this.formBoxValue.level = '';
+                // this.car_img = '';
             },
             handleCancel() {
-            this.formBoxShow = false;
-            this.formBoxID = '';
-            this.formBoxValue.name = '';
-            this.formBoxValue.car_id = '';
-            this.formBoxValue.phone = '';
+                this.formBoxShow = false;
+                this.formBoxID = '';
+                this.formBoxValue.name = '';
+                this.formBoxValue.price = '';
+                this.formBoxValue.state = '';
+                this.formBoxValue.level = '';
             },
             handleEditUser(data,index) {
-            this.formBoxTitle = '编辑用户';
-            this.formBoxID = data.id;
-            this.formBoxValue.name = data.name;
-            this.formBoxValue.car_id = data.car_id;
-            this.formBoxValue.phone = data.phone;
-            this.formBoxShow = true;
-            this.dataIndex = index
+                this.formBoxTitle = '编辑用户';
+                this.formBoxID = data.id;
+                this.formBoxValue.name = data.name;
+                this.formBoxValue.price = data.price;
+                this.formBoxValue.state = data.state;
+                this.formBoxValue.level = data.level;
+                this.formBoxShow = true;
+                this.dataIndex = index
             },
             handleSave() {
-            let id = this.formBoxID;
-            let name = this.formBoxValue.name;
-            let phone = this.formBoxValue.phone;
-            let car_id = this.formBoxValue.car_id;
-            let index = this.dataIndex;
-            let params = { name, phone, car_id }
-            // if(!name || !phone || !car_id){
-            //   this.$message.error('缺少必要参数')
-            //   return
-            // }
-            // 修改
-            if(id){
-                vehicleModel.update(id,params)
-                .then(() => {
-                    this.vehicleData[index].name = name
-                    this.vehicleData[index].phone = phone
-                    this.vehicleData[index].car_id = car_id
-                    this.formBoxShow = false;
-                    this.$message.success('修改成功');
-                })
-                .catch(()=>{
-                    this.formBoxShow = false;
-                })
-            
-            }else{
-                // 添加
-                vehicleModel.add(params)
-                .then(res => {
-                    console.log(res)
-                    let id = res.data.id;
-                    params.id = id;
-                    this.vehicleData.push(params)
-                    this.formBoxShow = false;
-                    this.$message.success('添加成功');
-                })
-                .catch(()=>{
-                    this.formBoxShow = false;
-                })
-            }
+                let id = this.formBoxID;
+                let name = this.formBoxValue.name;
+                let state = this.formBoxValue.state;
+                let price = this.formBoxValue.price;
+                let level = this.formBoxValue.level
+                let index = this.dataIndex;
+                let car_img = this.car_img;
+                let params = { name, state, price, level, car_img }
+                console.log(params)
+                // if(!name || !state || !price){
+                //   this.$message.error('缺少必要参数')
+                //   return
+                // }
+                // 修改
+                if(id){
+                    vehicleModel.update(id,params)
+                    .then(() => {
+                        this.vehicleData[index].name = name
+                        this.vehicleData[index].state = state
+                        this.vehicleData[index].price = price
+                        this.vehicleData[index].level = level;
+                        // this.vehicleData[index].car_img = car_img
+                        this.formBoxShow = false;
+                        this.$message.success('修改成功');
+                    })
+                    .catch(()=>{
+                        this.formBoxShow = false;
+                    })
+                
+                }else{
+                    // 添加
+                    vehicleModel.add(params)
+                    .then(res => {
+                        console.log(res)
+                        let id = res.data.id;
+                        params.id = id;
+                        this.vehicleData.push(params)
+                        this.formBoxShow = false;
+                        this.$message.success('添加成功');
+                    })
+                    .catch(()=>{
+                        this.formBoxShow = false;
+                    })
+                }
             },
             handleDelete(data,index) {
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            })
-            .then(()=>{
-                
-                return vehicleModel.delete(data.id)
-            })
-            .then(()=>{
-                this.vehicleData.splice(index,1)
-                this.$message({
-                type: 'success',
-                message: '删除成功!'
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                .then(()=>{
+                    
+                    return vehicleModel.delete(data.id)
+                })
+                .then(()=>{
+                    this.vehicleData.splice(index,1)
+                    this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                    });
+                })
+                .catch(() => {
+                    this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                    });
                 });
-            })
-            .catch(() => {
-                this.$message({
-                type: 'info',
-                message: '已取消删除'
-                });
-            });
             }
         },
         components: {
