@@ -63,7 +63,7 @@
             label="图片">
             <template slot-scope="scope" >
                <el-image
-                style="width: 100px; height: 100px"
+                style="width: 140px; height: 100px"
                 :src="scope.row.car_img"
                 ></el-image>
             </template>
@@ -76,14 +76,12 @@
             prop="level"
             label="级别">
             <template slot-scope="scope" >
-                <el-tag>
                 {{ scope.row.level === 0 ? "经济型" : "" }}
                 {{ scope.row.level === 1 ? "SUV" : "" }}
                 {{ scope.row.level === 2 ? "中级车" : "" }}
                 {{ scope.row.level === 3 ? "豪华型" : "" }}
                 {{ scope.row.level === 4 ? "商务型" : "" }}
                 {{ scope.row.level === 5 ? "6至15座商务车" : "" }}
-                </el-tag>
             </template>
           </el-table-column>
            <el-table-column

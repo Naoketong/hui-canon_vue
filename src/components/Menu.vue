@@ -24,6 +24,10 @@
           <i class="el-icon-truck"></i>
           <span slot="title">车辆管理</span>
         </el-menu-item>
+        <el-menu-item index="/admin/order">
+          <i class="el-icon-tickets"></i>
+          <span slot="title">订单（创建）管理</span>
+        </el-menu-item>
 
     
         <el-menu-item index="/admin/rent">
@@ -38,10 +42,7 @@
 
         
 
-        <el-menu-item index="/admin/order">
-          <i class="el-icon-tickets"></i>
-          <span slot="title">订单管理</span>
-        </el-menu-item>
+        
 
         <el-menu-item index="/admin/admin_user">
           <i class="el-icon-user-solid"></i>
@@ -50,16 +51,7 @@
 
 
 
-        <el-submenu index="3">
-          <template slot="title">
-            <i class="el-icon-share"></i>
-            <span>文章管理</span>
-          </template>
-<el-menu-item-group>
-    <el-menu-item index="/admin/article">文章列表</el-menu-item>
-       <el-menu-item index="/admin/article/create">新建文章</el-menu-item>
-</el-menu-item-group>
-</el-submenu>
+
 </el-menu>
 </el-col>
 </div>

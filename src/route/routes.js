@@ -6,6 +6,7 @@ import Cost from '@/pages/cost'
 import Over from '@/pages/over'
 import Admin_user from '@/pages/admin_user'
 import Vehicle from '@/pages/vehicle'
+import User_details from '@/pages/user_details'
 
 
 export default [{
@@ -21,6 +22,11 @@ export default [{
         path: '/admin/user',
         name: 'User',
         component: User,
+    },
+    {
+        path: '/admin/user/:id',
+        name: 'User_details',
+        component: User_details,
     },
     {
         path: '/admin/vehicle',
