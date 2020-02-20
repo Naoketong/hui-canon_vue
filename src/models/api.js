@@ -10,6 +10,8 @@ export default {
     admin_userItem: (id) => `${PREFIX}/admin_user/${id}`,
     vehicle: PREFIX + '/vehicle',
     vehicleItem: (id) => `${PREFIX}/vehicle/${id}`,
+    cost: PREFIX + '/cost',
+    costItem: (id) => `${PREFIX}/cost/${id}`,
 
 
 

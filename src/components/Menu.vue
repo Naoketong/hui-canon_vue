@@ -24,6 +24,10 @@
           <i class="el-icon-truck"></i>
           <span slot="title">车辆管理</span>
         </el-menu-item>
+         <el-menu-item index="/admin/cost">
+          <i class="el-icon-s-cooperation"></i>
+          <span slot="title">费用管理</span>
+        </el-menu-item>
         <el-menu-item index="/admin/order">
           <i class="el-icon-tickets"></i>
           <span slot="title">订单（创建）管理</span>
@@ -35,10 +39,7 @@
           <span slot="title">租车管理</span>
         </el-menu-item>
 
-        <el-menu-item index="/admin/cost">
-          <i class="el-icon-s-cooperation"></i>
-          <span slot="title">费用管理</span>
-        </el-menu-item>
+       
 
         
 
