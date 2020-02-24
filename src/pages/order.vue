@@ -231,8 +231,12 @@
             });
           });
         },
-        handledetails(data,index) {
-          console.log(12457)
+        handledetails(row) {
+          const { id } = row;
+          this.$router.push({
+            name: "Order_details",
+            params: { id }
+          });
         },
       },
       components: {
