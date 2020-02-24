@@ -78,7 +78,7 @@
   methods: {
     handleAddUser() {
       this.formBoxShow = true;
-      this.formBoxTitle = '添加用户';
+      this.formBoxTitle = '添加管理员';
       this.formBoxID = '';
       this.formBoxValue.name = '';
       this.formBoxValue.password = '';
@@ -92,7 +92,7 @@
       this.formBoxValue.phone = '';
     },
     handleEditUser(data,index) {
-      this.formBoxTitle = '编辑用户';
+      this.formBoxTitle = '编辑管理员';
       this.formBoxID = data.id;
       this.formBoxValue.name = data.name;
       this.formBoxValue.password = data.password;

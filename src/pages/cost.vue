@@ -6,7 +6,7 @@
           <el-form >
           <el-form-item label="车型" label-width="60px">
                 <el-select v-model="formBoxValue.car_id">
-                  <el-option v-for="item in vehicleDate" :label="item.name" :value="item.id" />
+                  <el-option v-for="item in vehicleDate" :label="item.car_name" :value="item.id" />
                 </el-select>
             </el-form-item>
             <el-form-item label="基础费" label-width="60px">
@@ -45,7 +45,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="car_name"
             label="车名">
           </el-table-column>
           <el-table-column
@@ -110,10 +110,11 @@
         created () {
             costModel.list().then( res => {
                 this.costData = res.data;
+                console.log(res)
             });
             vehicleModel.list().then(res => {
                 this.vehicleDate = res.data;
-                console.log(this.vehicleDate)
+                // console.log(this.vehicleDate)
             })
             
         },

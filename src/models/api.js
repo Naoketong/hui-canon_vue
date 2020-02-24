@@ -12,6 +12,8 @@ export default {
     vehicleItem: (id) => `${PREFIX}/vehicle/${id}`,
     cost: PREFIX + '/cost',
     costItem: (id) => `${PREFIX}/cost/${id}`,
+    order: PREFIX + '/order',
+    orderItem: (id) => `${PREFIX}/order/${id}`,
 
 
 

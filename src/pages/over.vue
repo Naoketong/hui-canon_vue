@@ -1,13 +1,20 @@
 <template>
     <Layout>
-        <div>概览</div>
-
-    <el-image
-      style="width: 100px; height: 100px"
-      :src="url"
-      ></el-image>
+        <div class="block">
+    <span class="demonstration" @click="qq">默认</span>
+    <el-date-picker
+      v-model="value"
+      
+      type="daterange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      >
+    </el-date-picker>
+    </br>
   </div>
-</div>
+ 
+  
 
 
     </Layout>
@@ -19,9 +26,17 @@
     export default {
         data() {
             return{
-                fits: ['fill',],
-        url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+                
+        value: '',
             }
+        },
+        created(){
+            console.log()
+        },
+        methods:{
+            qq(){
+                console.log(this.value)
+            },
         },
         components: {
             Layout,

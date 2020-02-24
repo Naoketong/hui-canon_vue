@@ -5,7 +5,7 @@
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form >
             <el-form-item label="车名" label-width="60px">
-              <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
+              <el-input name="car_name" width="200" v-model="formBoxValue.car_name"></el-input>
             </el-form-item>
             <el-form-item label="级别" label-width="60px">          
                 <el-select v-model="formBoxValue.level">
@@ -17,9 +17,7 @@
                     <el-option label="6至15座商务车" :value="5" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="价格" label-width="60px">
-              <el-input type="price" name="price" width="200" v-model="formBoxValue.price"></el-input>
-            </el-form-item>
+            
             <el-form-item label="状态" label-width="60px">
                 <el-select v-model="formBoxValue.state">
                     <el-option label="空闲" :value="0" />
@@ -69,7 +67,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="car_name"
             label="车名">
           </el-table-column>
           <el-table-column
@@ -83,10 +81,6 @@
                 {{ scope.row.level === 4 ? "商务型" : "" }}
                 {{ scope.row.level === 5 ? "6至15座商务车" : "" }}
             </template>
-          </el-table-column>
-           <el-table-column
-            prop="price"
-            label="价格">
           </el-table-column>
            <el-table-column
             prop="state"
@@ -131,8 +125,7 @@
                 formBoxShow: false,
                 formBoxTitle: '',
                 formBoxValue: {
-                    name: '',
-                    price: '',
+                    car_name: '',
                     state: '',
                     level: '',
                 },
@@ -197,8 +190,7 @@
                 this.formBoxShow = true;
                 this.formBoxTitle = '添加车型';
                 this.formBoxID = '';
-                this.formBoxValue.name = '';
-                this.formBoxValue.price = '';
+                this.formBoxValue.car_name = '';
                 this.formBoxValue.state = '';
                 this.formBoxValue.level = '';
                 // this.car_img = '';
@@ -206,16 +198,14 @@
             handleCancel() {
                 this.formBoxShow = false;
                 this.formBoxID = '';
-                this.formBoxValue.name = '';
-                this.formBoxValue.price = '';
+                this.formBoxValue.car_name = '';
                 this.formBoxValue.state = '';
                 this.formBoxValue.level = '';
             },
             handleEditUser(data,index) {
-                this.formBoxTitle = '编辑用户';
+                this.formBoxTitle = '编辑车型';
                 this.formBoxID = data.id;
-                this.formBoxValue.name = data.name;
-                this.formBoxValue.price = data.price;
+                this.formBoxValue.car_name = data.car_name;
                 this.formBoxValue.state = data.state;
                 this.formBoxValue.level = data.level;
                 this.formBoxShow = true;
@@ -223,15 +213,14 @@
             },
             handleSave() {
                 let id = this.formBoxID;
-                let name = this.formBoxValue.name;
+                let car_name = this.formBoxValue.car_name;
                 let state = this.formBoxValue.state;
-                let price = this.formBoxValue.price;
                 let level = this.formBoxValue.level
                 let index = this.dataIndex;
                 let car_img = this.car_img;
-                let params = { name, state, price, level, car_img }
+                let params = { car_name, state,  level, car_img }
                 console.log(params)
-                // if(!name || !state || !price){
+                // if(!name || !state || !){
                 //   this.$message.error('缺少必要参数')
                 //   return
                 // }
@@ -239,9 +228,8 @@
                 if(id){
                     vehicleModel.update(id,params)
                     .then(() => {
-                        this.vehicleData[index].name = name
+                        this.vehicleData[index].car_name = car_name
                         this.vehicleData[index].state = state
-                        this.vehicleData[index].price = price
                         this.vehicleData[index].level = level;
                         // this.vehicleData[index].car_img = car_img
                         this.formBoxShow = false;

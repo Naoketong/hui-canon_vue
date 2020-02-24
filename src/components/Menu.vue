@@ -11,10 +11,7 @@
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose">
-        <el-menu-item index="/admin/over">
-          <i class="el-icon-platform-eleme"></i>
-          <span slot="title">概览</span>
-        </el-menu-item>
+        
         <el-menu-item index="/admin/user">
           <i class="el-icon-user-solid"></i>
           <span slot="title">用户</span>
@@ -30,24 +27,22 @@
         </el-menu-item>
         <el-menu-item index="/admin/order">
           <i class="el-icon-tickets"></i>
-          <span slot="title">订单（创建）管理</span>
+          <span slot="title">订单管理</span>
         </el-menu-item>
-
-    
-        <el-menu-item index="/admin/rent">
-          <i class="el-icon-circle-plus"></i>
-          <span slot="title">租车管理</span>
-        </el-menu-item>
-
-       
-
-        
-
-        
 
         <el-menu-item index="/admin/admin_user">
           <i class="el-icon-user-solid"></i>
           <span slot="title">管理员</span>
+        </el-menu-item>
+        
+        
+        <el-menu-item index="/admin/rent">
+          <i class="el-icon-circle-plus"></i>
+          <span slot="title">租车管理</span>
+        </el-menu-item>
+        <el-menu-item index="/admin/over">
+          <i class="el-icon-platform-eleme"></i>
+          <span slot="title">概览</span>
         </el-menu-item>
 
 
