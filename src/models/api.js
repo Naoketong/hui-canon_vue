@@ -2,7 +2,7 @@ const PREFIX = '/api';
 export default {
     qiniuToken: `${PREFIX}/qiniu-uploadtoken`,
     qiniu_API: "https://upload-z2.qiniup.com",
-
+    login: PREFIX + '/login',
 
     user: PREFIX + '/user',
     userItem: (id) => `${PREFIX}/user/${id}`,
