@@ -7,6 +7,15 @@
             <el-form-item label="车名" label-width="60px">
               <el-input name="car_name" width="200" v-model="formBoxValue.car_name"></el-input>
             </el-form-item>
+            <el-form-item label="排量" label-width="60px">
+              <el-input name="car_displacement" width="200" v-model="formBoxValue.car_displacement"></el-input>
+            </el-form-item>
+            <el-form-item label="车身结构" label-width="70px">
+              <el-input name="car_structure" width="200" v-model="formBoxValue.car_structure"></el-input>
+            </el-form-item>
+            <el-form-item label="价格" label-width="60px">
+              <el-input name="price" width="200" v-model="formBoxValue.price"></el-input>
+            </el-form-item>
             <el-form-item label="级别" label-width="60px">          
                 <el-select v-model="formBoxValue.level">
                     <el-option label="经济型" :value="0" />
@@ -94,6 +103,14 @@
             </template>
           </el-table-column>
           <el-table-column
+            prop="car_displacement"
+            label="排量">
+          </el-table-column>
+          <el-table-column
+            prop="car_structure"
+            label="车身结构">
+          </el-table-column>
+          <el-table-column
             prop="operation"
             label="操作">
             <template slot-scope="scope">
@@ -128,6 +145,10 @@
                     car_name: '',
                     state: '',
                     level: '',
+                    car_displacement:'',
+                    car_structure:'',
+                    price:'',
+
                 },
                 formData:{
                     file_id:'',
@@ -193,7 +214,9 @@
                 this.formBoxValue.car_name = '';
                 this.formBoxValue.state = '';
                 this.formBoxValue.level = '';
-                // this.car_img = '';
+                this.formBoxValue.car_displacement = '',
+                this.formBoxValue.car_structure = '';
+                this.formBoxValue.price = '';
             },
             handleCancel() {
                 this.formBoxShow = false;
@@ -201,6 +224,9 @@
                 this.formBoxValue.car_name = '';
                 this.formBoxValue.state = '';
                 this.formBoxValue.level = '';
+                this.formBoxValue.car_displacement = '',
+                this.formBoxValue.car_structure = '';
+                this.formBoxValue.price = '';
             },
             handleEditUser(data,index) {
                 this.formBoxTitle = '编辑车型';
@@ -208,6 +234,9 @@
                 this.formBoxValue.car_name = data.car_name;
                 this.formBoxValue.state = data.state;
                 this.formBoxValue.level = data.level;
+                this.formBoxValue.car_displacement = data.car_displacement;
+                this.formBoxValue.car_structure =  data.car_structure;
+                this.formBoxValue.price = '';
                 this.formBoxShow = true;
                 this.dataIndex = index
             },
@@ -218,7 +247,10 @@
                 let level = this.formBoxValue.level
                 let index = this.dataIndex;
                 let car_img = this.car_img;
-                let params = { car_name, state,  level, car_img }
+                let car_displacement = this.formBoxValue.car_displacement;
+                let car_structure = this.formBoxValue.car_structure;
+                let price = this.formBoxValue.price;
+                let params = { car_name, state, price, level, car_img, car_displacement, car_structure }
                 console.log(params)
                 // if(!name || !state || !){
                 //   this.$message.error('缺少必要参数')
@@ -228,9 +260,12 @@
                 if(id){
                     vehicleModel.update(id,params)
                     .then(() => {
-                        this.vehicleData[index].car_name = car_name
-                        this.vehicleData[index].state = state
+                        this.vehicleData[index].car_name = car_name;
+                        this.vehicleData[index].state = state;
                         this.vehicleData[index].level = level;
+                        this.vehicleData[index].car_displacement = car_displacement
+                        this.vehicleData[index].car_structure = car_structure;
+                        this.vehicleData[index].price = price;
                         // this.vehicleData[index].car_img = car_img
                         this.formBoxShow = false;
                         this.$message.success('修改成功');
