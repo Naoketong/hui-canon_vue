@@ -98,6 +98,7 @@
             phone: '',
             car_id: '',
             data:[],
+            price:'',
           },          
         }
       },
@@ -112,10 +113,13 @@
       },
       methods: {
         hadnSelect(){
-          console.log(this.formBoxValue.car_id)
+          // console.log(this.formBoxValue.car_id)
           let id = this.formBoxValue.car_id;
           costModel.show(id).then( res => {
               this.costData = res.data[0]
+          })
+          vehicleModel.show(id).then(res => {
+            this.formBoxValue.price = res.data[0].price;
           })
         },
         handleAddUser() {
@@ -165,11 +169,15 @@
 
           let total = this.costData.cost_total;//除租赁费以外的总费用
           // console.log(total)
-          let cost_lease = this.costData.cost_lease;//车辆租赁费/天
-          let cost_total = Number(cost_lease) * Number(rent_days) + Number(total)
-          console.log(this.costData)
+          // let cost_lease = this.costData.cost_lease;
+          let price = this.formBoxValue.price;//车辆租赁费/天
+          console.log(this.vehicleDate)
+          let cost_total = Number(price) * Number(rent_days) + Number(total)
+
+
+          // console.log(this.costData)
           console.log(total,'除租赁费总数')
-          console.log(cost_lease,'租赁费')
+          console.log(price,'租赁费')
           console.log(cost_total,'总费用')
 
           
