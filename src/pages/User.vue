@@ -5,7 +5,7 @@
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form >
             <el-form-item label="姓名" label-width="60px">
-              <el-input name="guest_name" width="200" v-model="formBoxValue.guest_name"></el-input>
+              <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
             </el-form-item>
             <el-form-item label="手机" label-width="60px">
               <el-input name="phone" width="200" v-model="formBoxValue.phone"></el-input>
@@ -32,7 +32,7 @@
             label="id">
           </el-table-column>
           <el-table-column
-            prop="guest_name"
+            prop="name"
             label="姓名">
           </el-table-column>
           <el-table-column
@@ -69,7 +69,7 @@
           formBoxShow: false,
           formBoxTitle: '',
           formBoxValue: {
-            guest_name: '',
+            name: '',
             car_id: '',
             phone: '',
           },
@@ -90,21 +90,21 @@
           this.formBoxShow = true;
           this.formBoxTitle = '添加用户';
           this.formBoxID = '';
-          this.formBoxValue.guest_name = '';
+          this.formBoxValue.name = '';
           this.formBoxValue.car_id = '';
           this.formBoxValue.phone = '';
         },
         handleCancel() {
           this.formBoxShow = false;
           this.formBoxID = '';
-          this.formBoxValue.guest_name = '';
+          this.formBoxValue.name = '';
           this.formBoxValue.car_id = '';
           this.formBoxValue.phone = '';
         },
         handleEditUser(data,index) {
           this.formBoxTitle = '编辑用户';
           this.formBoxID = data.id;
-          this.formBoxValue.guest_name = data.guest_name;
+          this.formBoxValue.name = data.name;
           this.formBoxValue.car_id = data.car_id;
           this.formBoxValue.phone = data.phone;
           this.formBoxShow = true;
@@ -112,12 +112,12 @@
         },
         handleSave() {
           let id = this.formBoxID;
-          let guest_name = this.formBoxValue.guest_name;
+          let name = this.formBoxValue.name;
           let phone = this.formBoxValue.phone;
           let car_id = this.formBoxValue.car_id;
           let index = this.dataIndex;
-          let params = { guest_name, phone, car_id }
-          // if(!guest_name || !phone || !car_id){
+          let params = { name, phone, car_id }
+          // if(!name || !phone || !car_id){
           //   this.$message.error('缺少必要参数')
           //   return
           // }
@@ -125,7 +125,7 @@
           if(id){
             userModel.update(id,params)
               .then(() => {
-                this.userData[index].guest_name = guest_name
+                this.userData[index].name = name
                 this.userData[index].phone = phone
                 this.userData[index].car_id = car_id
                 this.formBoxShow = false;

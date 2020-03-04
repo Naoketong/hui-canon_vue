@@ -5,7 +5,7 @@
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form >
             <el-form-item label="姓名" label-width="60px">
-              <el-input name="guest_name" width="200" v-model="formBoxValue.guest_name"></el-input>
+              <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
             </el-form-item>
             <el-form-item label="手机" label-width="60px">
               <el-input name="phone" width="200" v-model="formBoxValue.phone"></el-input>
@@ -55,7 +55,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="guest_name"
+            prop="name"
             label="姓名">
           </el-table-column>
           <el-table-column
@@ -94,7 +94,7 @@
           formBoxShow: false,
           formBoxTitle: '',
           formBoxValue: {
-            guest_name: '',
+            name: '',
             phone: '',
             car_id: '',
             data:[],
@@ -126,7 +126,7 @@
           this.formBoxShow = true;
           this.formBoxTitle = '添加订单';
           this.formBoxID = '';
-          this.formBoxValue.guest_name = '';
+          this.formBoxValue.name = '';
           this.formBoxValue.car_id = '';
           this.formBoxValue.phone = '';
           this.formBoxValue.data = '';
@@ -137,7 +137,7 @@
         handleCancel() {
           this.formBoxShow = false;
           this.formBoxID = '';
-          this.formBoxValue.guest_name = '';
+          this.formBoxValue.name = '';
           this.formBoxValue.car_id = '';
           this.formBoxValue.phone = '';
           this.formBoxValue.data = '';
@@ -145,7 +145,7 @@
         handleEditUser(data,index) {
           this.formBoxTitle = '编辑订单';
           this.formBoxID = data.id;
-          this.formBoxValue.guest_name = data.guest_name;
+          this.formBoxValue.name = data.name;
           this.formBoxValue.car_id = data.car_id;
           this.formBoxValue.phone = data.phone;
           this.formBoxValue.data = data.data;
@@ -153,10 +153,16 @@
           this.dataIndex = index
         },
         handleSave() {
-          console.log(this.costData)
+          let order_number = ""; //订单号
+          for (let i = 0; i < 6; i++) //6位随机数，用以加在时间戳后面。
+          {
+              order_number += Math.floor(Math.random() * 10);
+          }
+          order_number = new Date().getTime() + order_number; //时间戳，用来生成订单号。
+
           let id = this.formBoxID;
           let index = this.dataIndex;
-          let guest_name = this.formBoxValue.guest_name;
+          let name = this.formBoxValue.name;
           let phone = this.formBoxValue.phone;
           let car_id = this.formBoxValue.car_id;
                   
@@ -181,16 +187,16 @@
           console.log(cost_total,'总费用')
 
           
-          if(!guest_name || !phone || !car_id || !sat_at || !end_at || !rent_days || !cost_total){
+          if(!order_number || !name || !phone || !car_id || !sat_at || !end_at || !rent_days || !cost_total){
             this.$message.error('缺少必要参数')
             return
           }
-          let params = { guest_name, phone, car_id, sat_at, end_at, rent_days, cost_total }
+          let params = { name, phone, car_id, sat_at, end_at, rent_days, cost_total }
           // 修改
           if(id){
             orderModel.update(id,params)
               .then(() => {
-                this.orderData[index].guest_name = guest_name
+                this.orderData[index].name = name
                 this.orderData[index].phone = phone
                 this.orderData[index].car_id = car_id
                 this.formBoxShow = false;
