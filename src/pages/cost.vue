@@ -9,13 +9,10 @@
                   <el-option v-for="item in vehicleDate" :label="item.car_name" :value="item.id" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="基础费" label-width="60px">
+            <el-form-item label="基础服务费" label-width="90px">
               <el-input name="cost_basis" width="100" v-model="formBoxValue.cost_basis"></el-input>
             </el-form-item>
             
-            <el-form-item label="租赁费" label-width="60px">
-              <el-input type="cost_lease" name="cost_lease" width="100" v-model="formBoxValue.cost_lease"></el-input>
-            </el-form-item>
             <el-form-item label="整备费" label-width="60px">
               <el-input name="cost_servic" width="100" v-model="formBoxValue.cost_servic"></el-input>
             </el-form-item>
@@ -52,10 +49,7 @@
             prop="cost_basis"
             label="基础费">
           </el-table-column>
-          <el-table-column
-            prop="cost_lease"
-            label="租赁费">
-          </el-table-column>
+          
           <el-table-column
             prop="cost_servic"
             label="整备费">
@@ -66,7 +60,7 @@
           </el-table-column>
           <el-table-column
             prop="cost_total"
-            label="总费用">
+            label="除租赁总费用">
           </el-table-column>
          
           <el-table-column
@@ -99,7 +93,6 @@
                 formBoxValue: {
                     car_id: '',
                     cost_basis: '',
-                    cost_lease: '',
                     cost_servic: '',
                     cost_insurance: '',
                     // cost_total: '',
@@ -125,7 +118,6 @@
                 this.formBoxID = '';
                 this.formBoxValue.car_id = '';
                 this.formBoxValue.cost_basis = '';
-                this.formBoxValue.cost_lease = '';
                 this.formBoxValue.cost_servic = '';
                 this.formBoxValue.cost_insurance = '';
             },
@@ -134,7 +126,6 @@
                 this.formBoxID = '';
                 this.formBoxValue.car_id = '';
                 this.formBoxValue.cost_basis = '';
-                this.formBoxValue.cost_lease = '';
                 this.formBoxValue.cost_servic = '';
                 this.formBoxValue.cost_insurance = '';
             },
@@ -143,7 +134,6 @@
                 this.formBoxID = data.id;
                 this.formBoxValue.car_id = data.car_id;
                 this.formBoxValue.cost_basis = data.cost_basis;
-                this.formBoxValue.cost_lease = data.cost_lease;
                 this.formBoxValue.cost_servic = data.cost_servic;
                 this.formBoxValue.cost_insurance = data.cost_insurance;
                 this.formBoxShow = true;
@@ -154,12 +144,11 @@
                 let car_id = this.formBoxValue.car_id;
                 let cost_basis = this.formBoxValue.cost_basis;
                 let cost_servic = this.formBoxValue.cost_servic;
-                let cost_lease = this.formBoxValue.cost_lease;
                 let cost_insurance = this.formBoxValue.cost_insurance
                 let index = this.dataIndex;
-                let params = { car_id, cost_basis, cost_servic, cost_lease, cost_insurance }
+                let params = { car_id, cost_basis, cost_servic,  cost_insurance }
                 console.log(params)
-                if(!car_id || !cost_basis || !cost_servic || !cost_lease || !cost_insurance){
+                if(!car_id || !cost_basis || !cost_servic ||  !cost_insurance){
                   this.$message.error('缺少必要参数')
                   return
                 }
@@ -170,7 +159,6 @@
                         this.costData[index].car_id = car_id
                         this.costData[index].cost_basis = cost_basis
                         this.costData[index].cost_servic = cost_servic
-                        this.costData[index].cost_lease = cost_lease
                         this.costData[index].cost_insurance = cost_insurance;
                         // this.costData[index].car_img = car_img
                         this.formBoxShow = false;

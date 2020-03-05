@@ -2,6 +2,7 @@
   <div>
     <div class="logo-container">
       <!--<img class="logo" src="~@/assets/login_logo.png">-->
+      <div class="logo-title">汇典</div>
       <span>汇典出行</span>
     </div>
     <el-col>
@@ -36,10 +37,7 @@
         </el-menu-item>
         
         
-        <el-menu-item index="/admin/rent">
-          <i class="el-icon-circle-plus"></i>
-          <span slot="title">租车管理</span>
-        </el-menu-item>
+       
         <el-menu-item index="/admin/over">
           <i class="el-icon-platform-eleme"></i>
           <span slot="title">概览</span>
@@ -80,19 +78,36 @@
 
 <style scoped lang="less">
     .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
         height: 60px;
-        line-height: 59px;
         color: #002140;
-        font-size: 14px;
         border-bottom: 1px solid #e4e4e4;
         .logo {
             height: 40px;
             margin: 10px 20px;
             vertical-align: middle;
         }
+        .logo-title{
+          text-align: center;
+          width: 50px;
+          height: 40px;
+          background: #7db3d9;
+          color: #f5f5f5;
+          font-size: 14px;
+          line-height: 40px;
+          border-radius: 5px;
+        }
+        span{
+          font-size: 14px;
+          margin-left: 10px;
+          color: #606266;
+        }
     }
     
     .el-menu {
         border-right: 0;
     }
+    
 </style>

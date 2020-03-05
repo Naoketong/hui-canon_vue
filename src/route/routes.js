@@ -1,7 +1,6 @@
 import Login from '@/pages/Login'
 import User from '@/pages/User'
 import Order from '@/pages/order'
-import Rent from '@/pages/rent'
 import Cost from '@/pages/cost'
 import Over from '@/pages/over'
 import Admin_user from '@/pages/admin_user'
@@ -44,11 +43,7 @@ export default [{
         name: 'Order_details',
         component: Order_details,
     },
-    {
-        path: '/admin/rent',
-        name: 'Rent',
-        component: Rent,
-    },
+
     {
         path: '/admin/cost',
         name: 'Cost',

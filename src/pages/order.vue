@@ -191,7 +191,7 @@
             this.$message.error('缺少必要参数')
             return
           }
-          let params = { name, phone, car_id, sat_at, end_at, rent_days, cost_total }
+          let params = {order_number, name, phone, car_id, sat_at, end_at, rent_days, cost_total }
           // 修改
           if(id){
             orderModel.update(id,params)
