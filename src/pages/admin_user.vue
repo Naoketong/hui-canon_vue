@@ -3,15 +3,37 @@
         <div class="pg-main-header">
         <el-button type="primary" @click="handleAddUser">添加管理员</el-button>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
-          <el-form >
+          <el-form :model="formBoxValue" :rules="Rules">
             <el-form-item label="姓名" label-width="60px">
-              <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
+              <el-input
+                  type="text"
+                  prefix-icon="el-icon-user"
+                  placeholder="请输入姓名"
+                  v-model="formBoxValue.name"
+                  autocomplete="off"
+                ></el-input>
             </el-form-item>
-            <el-form-item label="手机" label-width="60px">
-              <el-input name="phone" width="200" v-model="formBoxValue.phone"></el-input>
+            <el-form-item label="手机" label-width="60px" prop="phone">
+              <!--<el-input name="phone" width="200" v-model="formBoxValue.phone"></el-input>-->
+              <el-input
+                  type="text"
+                  prefix-icon="el-icon-mobile-phone"
+                  placeholder="请输手机号"
+                  v-model="formBoxValue.phone"
+                  autocomplete="off"
+                ></el-input>
             </el-form-item>
+            
             <el-form-item label="密码" label-width="60px">
-              <el-input type="password" name="password" width="200" v-model="formBoxValue.password"></el-input>
+              <!--<el-input type="password" name="password" width="200" v-model="formBoxValue.password"></el-input>-->
+              <el-input
+                    class="flex-cell-bd"
+                    type="text"
+                    placeholder="请输入密码"
+                    v-model="formBoxValue.password"
+                    autocomplete="off"
+                    prefix-icon="el-icon-mobile"
+                  ></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -67,12 +89,23 @@
         password: '',
         phone: '',
       },
+      Rules: {
+        phone: [
+          { required: true, message: "请输入手机号", trigger: "blur" },
+          {
+            pattern: /^1[3456789]\d{9}$/,
+            message: "目前只支持中国大陆的手机号码",
+            trigger: "blur"
+          }
+        ],
+        // code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
+      },
     }
   },
   created () {
     userModel.list().then( res => {
       this.userData = res.data;
-      console.log(this.userData)
+      // console.log(this.userData)
     })
   },
   methods: {
@@ -107,38 +140,39 @@
       let password = this.formBoxValue.password;
       let index = this.dataIndex;
       let params = { name, phone, password }
+      console.log(params)
       // if(!name || !phone || !password){
       //   this.$message.error('缺少必要参数')
       //   return
       // }
       // 修改
-      if(id){
-        userModel.update(id,params)
-          .then(() => {
-            this.userData[index].name = name
-            this.userData[index].phone = phone
-            this.userData[index].password = password
-            this.formBoxShow = false;
-            this.$message.success('修改成功');
-          })
-          .catch(()=>{
-            this.formBoxShow = false;
-          })
-      // // 添加
-      }else{
-        userModel.add(params)
-          .then(res => {
-            console.log(res)
-            let id = res.data.id;
-            params.id = id;
-            this.userData.push(params)
-            this.formBoxShow = false;
-            this.$message.success('添加成功');
-          })
-          .catch(()=>{
-            this.formBoxShow = false;
-          })
-      }
+      // if(id){
+      //   userModel.update(id,params)
+      //     .then(() => {
+      //       this.userData[index].name = name
+      //       this.userData[index].phone = phone
+      //       this.userData[index].password = password
+      //       this.formBoxShow = false;
+      //       this.$message.success('修改成功');
+      //     })
+      //     .catch(()=>{
+      //       this.formBoxShow = false;
+      //     })
+      // // // 添加
+      // }else{
+      //   userModel.add(params)
+      //     .then(res => {
+      //       console.log(res)
+      //       let id = res.data.id;
+      //       params.id = id;
+      //       this.userData.push(params)
+      //       this.formBoxShow = false;
+      //       this.$message.success('添加成功');
+      //     })
+      //     .catch(()=>{
+      //       this.formBoxShow = false;
+      //     })
+      // }
     },
     handleDelete(data,index) {
       
@@ -178,5 +212,12 @@ console.log(params)
 <style lang="less">
   .pg-main-body{
     margin-top: 20px;
+  }
+  .el-form-item {
+      margin-bottom: 22px;
+      display: inline-block;
+  }
+  .input-text{
+      width:194px;
   }
 </style>

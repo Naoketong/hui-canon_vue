@@ -3,12 +3,16 @@
         <div class="pg-main-header">
         <el-button type="primary" @click="handleAddUser">添加订单</el-button>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
-          <el-form >
+          <el-form  :model="formBoxValue" :rules="Rules">
             <el-form-item label="姓名" label-width="60px">
               <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
             </el-form-item>
-            <el-form-item label="手机" label-width="60px">
-              <el-input name="phone" width="200" v-model="formBoxValue.phone"></el-input>
+            <el-form-item label="手机" label-width="60px" prop="phone">
+				<el-input
+                  type="text"
+                  v-model="formBoxValue.phone"
+                  autocomplete="off"
+                ></el-input>
             </el-form-item>
             <el-form-item label="车型" label-width="60px">
                 <el-select v-model="formBoxValue.car_id" @change="hadnSelect">
@@ -99,7 +103,17 @@
             car_id: '',
             data:[],
             price:'',
-          },          
+          },   
+          Rules: {
+			phone: [
+				{ required: true, message: "请输入手机号", trigger: "blur" },
+				{
+					pattern: /^1[3456789]\d{9}$/,
+					message: "目前只支持中国大陆的手机号码",
+					trigger: "blur"
+				}
+			],
+		},       
         }
       },
       created () {
@@ -262,4 +276,12 @@
   .pg-main-body{
     margin-top: 20px;
   }
+  .el-form-item {
+      margin-bottom: 22px;
+      display: inline-block;
+  }
+  .input-text{
+      width:194px;
+  }
 </style>
+

@@ -214,3 +214,16 @@
         },
     }
 </script>
+<style lang="less">
+  .pg-main-body{
+    margin-top: 20px;
+  }
+  .el-form-item {
+      margin-bottom: 22px;
+      display: inline-block;
+      width:250px;
+  }
+  .input-text{
+      width:194px;
+  }
+</style>

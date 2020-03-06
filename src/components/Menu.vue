@@ -38,10 +38,10 @@
         
         
        
-        <el-menu-item index="/admin/over">
+        <!--<el-menu-item index="/admin/over">
           <i class="el-icon-platform-eleme"></i>
           <span slot="title">概览</span>
-        </el-menu-item>
+        </el-menu-item>-->
 
 
 

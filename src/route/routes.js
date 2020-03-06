@@ -10,38 +10,45 @@ import Order_details from '@/pages/order_details'
 
 export default [{
         path: '/',
-        redirect: { name: 'Login' }
+        // redirect: { name: 'Login' },
+
     },
     {
-        path: '/admin',
+        path: '/admin/login',
         name: 'Login',
         component: Login,
+
     },
     {
         path: '/admin/user',
         name: 'User',
         component: User,
+
     },
 
     {
         path: '/admin/vehicle',
         name: 'Vehicle',
-        component: Vehicle
+        component: Vehicle,
+
     },
     {
         path: '/admin/over',
         name: 'Over',
         component: Over,
+
     },
     {
         path: '/admin/order',
         name: 'Order',
         component: Order,
+
     },
     {
         path: '/admin/order/:id',
         name: 'Order_details',
         component: Order_details,
+
     },
 
     {

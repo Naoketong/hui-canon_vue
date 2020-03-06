@@ -104,9 +104,15 @@ export default {
             if(res.code == 200){
                 localStorage.setItem('token',res.data.token);
                 this.$router.replace({ name: "User" })
+            }else{
+              this.$message.info('请输入正确账号和密码');
+              this.smsFrom.password =' ',
+              this.smsFrom.phone = ''
+              return
             }
         }).catch(err => {
-            this.$message.info('请输入正确账号和密码');
+          console.log(err)
+            this.$message.info('服务器错误，请联系管理员');
         })
 
     //   this.$refs[formName].validate(valid => {

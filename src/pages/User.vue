@@ -3,18 +3,30 @@
         <div class="pg-main-header">
         <el-button type="primary" @click="handleAddUser">添加用户</el-button>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
-          <el-form >
+          <el-form :model="formBoxValue" :rules="Rules">
             <el-form-item label="姓名" label-width="60px">
-              <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
+                <el-input
+                  type="text"
+                  prefix-icon="el-icon-user"
+                  placeholder="请输入姓名"
+                  v-model="formBoxValue.name"
+                  autocomplete="off"
+                ></el-input>
             </el-form-item>
-            <el-form-item label="手机" label-width="60px">
-              <el-input name="phone" width="200" v-model="formBoxValue.phone"></el-input>
+            <el-form-item label="手机" label-width="60px" prop="phone">
+                <el-input
+                  type="text"
+                  prefix-icon="el-icon-mobile-phone"
+                  placeholder="请输手机号"
+                  v-model="formBoxValue.phone"
+                  autocomplete="off"
+                ></el-input>
             </el-form-item>
-            <el-form-item label="车型" label-width="60px">
+            <!--<el-form-item label="车型" label-width="60px">
                 <el-select v-model="formBoxValue.car_id">
                   <el-option v-for="item in vehicleDate" :label="item.car_name" :value="item.id" />
                 </el-select>
-            </el-form-item>
+            </el-form-item>-->
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="handleSave">保存</el-button>
@@ -44,7 +56,7 @@
             prop="operation"
             label="操作">
             <template slot-scope="scope">
-            <el-button  type="text" icon="el-icon-user" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>
+            <!--<el-button  type="text" icon="el-icon-user" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>-->
               <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
               <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
             </template>
@@ -62,18 +74,29 @@
     export default {
       data () {
         return {
-          userData: [],
-          vehicleDate:[],
-          dataIndex: null,
-          formBoxID: null,
-          formBoxShow: false,
-          formBoxTitle: '',
-          formBoxValue: {
-            name: '',
-            car_id: '',
-            phone: '',
-          },
-          value:'',
+            userData: [],
+            vehicleDate:[],
+            dataIndex: null,
+            formBoxID: null,
+            formBoxShow: false,
+            formBoxTitle: '',
+            formBoxValue: {
+                name: '',
+                car_id: '',
+                phone: '',
+            },
+            value:'',
+            Rules: {
+            phone: [
+                { required: true, message: "请输入手机号", trigger: "blur" },
+                {
+                pattern: /^1[3456789]\d{9}$/,
+                message: "目前只支持中国大陆的手机号码",
+                trigger: "blur"
+                }
+            ],
+          // code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
+      },
         }
       },
       created () {
@@ -186,5 +209,12 @@
 <style lang="less">
   .pg-main-body{
     margin-top: 20px;
+  }
+  .el-form-item {
+      margin-bottom: 22px;
+      display: inline-block;
+  }
+  .input-text{
+      width:194px;
   }
 </style>

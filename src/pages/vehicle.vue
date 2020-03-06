@@ -3,18 +3,18 @@
         <div class="pg-main-header">
         <el-button type="primary" @click="handleAddUser">添加车型</el-button>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
-          <el-form >
+          <el-form class="handEdit">
             <el-form-item label="车名" label-width="60px">
-              <el-input name="car_name" width="200" v-model="formBoxValue.car_name"></el-input>
+              <el-input class="input-text" name="car_name" width="200" v-model="formBoxValue.car_name"></el-input>
             </el-form-item>
             <el-form-item label="排量" label-width="60px">
-              <el-input name="car_displacement" width="200" v-model="formBoxValue.car_displacement"></el-input>
+              <el-input class="input-text" name="car_displacement" width="200" v-model="formBoxValue.car_displacement"></el-input>
             </el-form-item>
-            <el-form-item label="车身结构" label-width="70px">
-              <el-input name="car_structure" width="200" v-model="formBoxValue.car_structure"></el-input>
+            <el-form-item label="结构" label-width="60px">
+              <el-input class="input-text" name="car_structure" width="200" v-model="formBoxValue.car_structure"></el-input>
             </el-form-item>
             <el-form-item label="价格" label-width="60px">
-              <el-input name="price" width="200" v-model="formBoxValue.price"></el-input>
+              <el-input class="input-text" name="price" width="200" v-model="formBoxValue.price"></el-input>
             </el-form-item>
             <el-form-item label="级别" label-width="60px">          
                 <el-select v-model="formBoxValue.level">
@@ -110,6 +110,14 @@
             prop="car_structure"
             label="车身结构">
           </el-table-column>
+           <el-table-column
+            prop="price"
+            label="价格">
+            <template slot-scope="scope">
+                {{scope.row.price}}元
+            </template>
+
+          </el-table-column>
           <el-table-column
             prop="operation"
             label="操作">
@@ -183,6 +191,7 @@
                 }
                 this.btnloading = true;
                 qiniuService.upload(file).then(res => {
+                    // console.log(res)
                     this.car_img = res;
                 this.fileList = [{ name: '上传成功', url: res }];
                 this.formData.file_id = res.id;
@@ -227,6 +236,7 @@
                 this.formBoxValue.car_displacement = '',
                 this.formBoxValue.car_structure = '';
                 this.formBoxValue.price = '';
+                this.fileList = [];
             },
             handleEditUser(data,index) {
                 this.formBoxTitle = '编辑车型';
@@ -241,6 +251,7 @@
                 this.dataIndex = index
             },
             handleSave() {
+                this.fileList = [];
                 let id = this.formBoxID;
                 let car_name = this.formBoxValue.car_name;
                 let state = this.formBoxValue.state;
@@ -320,3 +331,12 @@
         },
     }
 </script>
+<style scoped lang="less">
+    .el-form-item {
+        margin-bottom: 22px;
+        display: inline-block;
+    }
+    .input-text{
+        width:194px;
+    }
+</style>
