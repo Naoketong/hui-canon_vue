@@ -140,6 +140,7 @@
           let car_id = this.formBoxValue.car_id;
           let index = this.dataIndex;
           let params = { name, phone, car_id }
+          console.log(params,id,'id')
           // if(!name || !phone || !car_id){
           //   this.$message.error('缺少必要参数')
           //   return

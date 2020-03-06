@@ -146,33 +146,33 @@
       //   return
       // }
       // 修改
-      // if(id){
-      //   userModel.update(id,params)
-      //     .then(() => {
-      //       this.userData[index].name = name
-      //       this.userData[index].phone = phone
-      //       this.userData[index].password = password
-      //       this.formBoxShow = false;
-      //       this.$message.success('修改成功');
-      //     })
-      //     .catch(()=>{
-      //       this.formBoxShow = false;
-      //     })
-      // // // 添加
-      // }else{
-      //   userModel.add(params)
-      //     .then(res => {
-      //       console.log(res)
-      //       let id = res.data.id;
-      //       params.id = id;
-      //       this.userData.push(params)
-      //       this.formBoxShow = false;
-      //       this.$message.success('添加成功');
-      //     })
-      //     .catch(()=>{
-      //       this.formBoxShow = false;
-      //     })
-      // }
+      if(id){
+        userModel.update(id,params)
+          .then(() => {
+            this.userData[index].name = name
+            this.userData[index].phone = phone
+            this.userData[index].password = password
+            this.formBoxShow = false;
+            this.$message.success('修改成功');
+          })
+          .catch(()=>{
+            this.formBoxShow = false;
+          })
+      // // 添加
+      }else{
+        userModel.add(params)
+          .then(res => {
+            console.log(res)
+            let id = res.data.id;
+            params.id = id;
+            this.userData.push(params)
+            this.formBoxShow = false;
+            this.$message.success('添加成功');
+          })
+          .catch(()=>{
+            this.formBoxShow = false;
+          })
+      }
     },
     handleDelete(data,index) {
       
