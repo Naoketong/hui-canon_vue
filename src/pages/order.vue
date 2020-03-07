@@ -1,6 +1,11 @@
 <template>
     <Layout>
         <div class="pg-main-header">
+		<div class="page-input">
+			<el-input class="page-input-item" v-model="seekInput" placeholder="请输入手机号码"></el-input>
+			<el-button class="page-input-button" type="primary" @click="seekButton">搜索</el-button>
+			<el-button type="primary" class="btn" @click="getData">取消</el-button>
+		</div>
         <el-button type="primary" @click="handleAddUser">添加订单</el-button>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form  :model="formBoxValue" :rules="Rules">
@@ -38,6 +43,9 @@
           </div>
         </el-dialog>
       </div>
+
+
+	  
       <div class="pg-main-body">
         <el-table
           :data="orderData"
@@ -78,6 +86,16 @@
           </el-table-column>
         </el-table>
       </div>
+      <el-pagination
+          v-if="pagination.total > pagination.pageSize"
+          background
+          layout="prev, pager, next"
+          :current-page.sync="pagination.currentPage"
+          :page-size="pagination.pageSize"
+          :total="pagination.total"
+          @current-change="getData"
+        >
+      </el-pagination>
     </Layout>
 
 </template>
@@ -90,42 +108,74 @@
     export default {
       data () {
         return {
-          orderData: [],
-          vehicleDate:[],
-          costData: [],
-          dataIndex: null,
-          formBoxID: null,
-          formBoxShow: false,
-          formBoxTitle: '',
-          formBoxValue: {
-            name: '',
-            phone: '',
-            car_id: '',
-            data:[],
-            price:'',
-          },   
-          Rules: {
-			phone: [
-				{ required: true, message: "请输入手机号", trigger: "blur" },
-				{
-					pattern: /^1[3456789]\d{9}$/,
-					message: "目前只支持中国大陆的手机号码",
-					trigger: "blur"
-				}
-			],
-		},       
+          	orderData: [],
+          	vehicleDate:[],
+          	costData: [],
+          	dataIndex: null,
+          	formBoxID: null,
+          	formBoxShow: false,
+          	formBoxTitle: '',
+          	formBoxValue: {
+          	  name: '',
+          	  phone: '',
+          	  car_id: '',
+          	  data:[],
+          	  price:'',
+          	},   
+          	Rules: {
+          	  phone: [
+              { required: true, message: "请输入手机号", trigger: "blur" },
+              {
+                pattern: /^1[3456789]\d{9}$/,
+                message: "目前只支持中国大陆的手机号码",
+                trigger: "blur"
+              }
+          	  ],
+          	},    
+          	pagination: {
+          	    total: 0,
+          	    currentPage: 1,
+          	    pageSize: 10
+          	},  
+			seekInput:'',
+			  
         }
       },
       created () {
-        orderModel.list().then( res => {
-          this.orderData = res.data;
-        });
-        vehicleModel.list().then(res => {
-          this.vehicleDate = res.data;
-        })
+        this.getData();
+        this.getVehicle();
         
       },
       methods: {
+		seekButton() {
+			let phone = this.seekInput;
+			orderModel.orderFind(phone).then(res=>{
+				// console.log(res)
+				this.orderData = res.data;
+			})
+		},
+        getData() {
+            let params = {
+                current_page: this.pagination.currentPage,
+                page_size: this.pagination.pageSize,
+            };
+            // console.log(params)
+            orderModel
+                .list(params)
+                .then(res => {
+                // console.log(res)
+                this.orderData = res.data.datas;
+                this.pagination.pageSize = Number(res.data.pagination.page_size);
+                this.pagination.currentPage = Number(res.data.pagination.current_page);
+                this.pagination.total = Number(res.data.pagination.total);
+            })
+			this.seekInput = '';
+        },
+        getVehicle(){
+          vehicleModel.list().then(res => {
+            this.vehicleDate = res.data;
+          })
+        },
         hadnSelect(){
           // console.log(this.formBoxValue.car_id)
           let id = this.formBoxValue.car_id;
@@ -179,7 +229,10 @@
           let name = this.formBoxValue.name;
           let phone = this.formBoxValue.phone;
           let car_id = this.formBoxValue.car_id;
-                  
+          if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
+            this.$message.info('手机号码有误，请重填'); 
+            return ; 
+          }         
           /*租借开始结束时间和天数 */
           let sat_at = this.formBoxValue.data[0];
           let end_at = this.formBoxValue.data[1];
@@ -189,7 +242,6 @@
 
           let total = this.costData.cost_total;//除租赁费以外的总费用
           // console.log(total)
-          // let cost_lease = this.costData.cost_lease;
           let price = this.formBoxValue.price;//车辆租赁费/天
           console.log(this.vehicleDate)
           let cost_total = Number(price) * Number(rent_days) + Number(total)
@@ -266,6 +318,14 @@
             params: { id }
           });
         },
+		btnaction() {
+//				location.reload()
+//              this.$router.go(0)
+                this.$router.replace({
+                	name:'Order'
+                })
+			},
+
       },
       components: {
         Layout
@@ -282,6 +342,26 @@
   }
   .input-text{
       width:194px;
+  }
+  .page-input{
+	  margin-bottom:20px;
+	  .page-input-item{
+		  display:inline-block;
+		  width:300px;
+		  margin-right:30px;
+	  }
+	  .page-input-button{
+		  display:inline-block
+
+	  }
+  }
+  .page-seek{
+    border-bottom: 1px solid #F56C6C;
+    margin-bottom: 30px;
+    h2{
+      display: inline-block;
+      color: #F56C6C;
+    }
   }
 </style>
 

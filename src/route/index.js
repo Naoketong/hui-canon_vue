@@ -17,7 +17,7 @@ appRouter.beforeEach((to, from, next) => {
     // console.log(to)
     let hasToken = localStorage.getItem('token') ? true : false;
     if (to.name === 'Login' && hasToken) {
-        next({ name: 'USer' })
+        next({ name: 'User' })
     }
     if (to.name !== 'Login' && !hasToken) {
         next({ name: 'Login' })

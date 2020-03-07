@@ -38,13 +38,6 @@
                 
                 </div>
               </el-form-item>
-              <el-form-item prop="checked">
-                <div class="flex-cell">
-                  <el-checkbox class="flex-cell-bd" v-model="smsFrom.checked"
-                    >自动登录</el-checkbox
-                  >
-                </div>
-              </el-form-item>
               <el-form-item>
                 <el-button
                   type="primary"
@@ -80,13 +73,13 @@ export default {
             trigger: "blur"
           }
         ],
-        // code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
       },
       disabled: false
     };
   },
   created(){
     let token = localStorage.getItem('token');
+    console.log(token)
     if(token != null){
         this.$router.push({name: 'User'})
     }
@@ -95,6 +88,10 @@ export default {
     submitForm(formName) {
         let password = this.smsFrom.password;
         let phone = this.smsFrom.phone;
+        if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
+            this.$message.info('手机号码有误，请重填'); 
+            return ; 
+        } 
         console.log(password,phone)
         if(!phone || !password){
             this.$message.info('请输入账号与密码');
@@ -102,7 +99,7 @@ export default {
         } 
         userModel.login({phone:phone,password:password}).then(res => {
             if(res.code == 200){
-                localStorage.setItem('token',res.data.token);
+                localStorage.setItem('token',res.token);
                 this.$router.replace({ name: "User" })
             }else{
               this.$message.info('请输入正确账号和密码');
@@ -114,17 +111,13 @@ export default {
           console.log(err)
             this.$message.info('服务器错误，请联系管理员');
         })
-
-    //   this.$refs[formName].validate(valid => {
-    //   	this.$router.replace({ name: "User" })
-    //   })
     },
     login:function() {
       
       user.login({phone:phone,password:password}).then(res => {
         if(res.data.code == 200){
-          localStorage.setItem('token',res.data.token);
-          this.$router.push({name: 'user'})
+          // localStorage.setItem('token',res.data.token);
+          // this.$router.push({name: 'user'})
         }
       }).catch(err => {
         this.$message.info('请输入正确账号和密码');
@@ -184,6 +177,9 @@ export default {
     background-color: #7db3d9;
     text-align: center;
   }
+}
+.login-form-phone{
+  text-align:center;
 }
 .company-info-desc {
   margin: 12px 0 40px;

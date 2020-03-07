@@ -140,11 +140,14 @@
       let password = this.formBoxValue.password;
       let index = this.dataIndex;
       let params = { name, phone, password }
-      console.log(params)
-      // if(!name || !phone || !password){
-      //   this.$message.error('缺少必要参数')
-      //   return
-      // }
+      if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
+            this.$message.info('手机号码有误，请重填'); 
+            return ; 
+        } 
+      if(!name || !phone || !password){
+        this.$message.error('缺少必要参数')
+        return
+      }
       // 修改
       if(id){
         userModel.update(id,params)

@@ -14,7 +14,7 @@ export default [{
 
     },
     {
-        path: '/admin/login',
+        path: '/admin',
         name: 'Login',
         component: Login,
 

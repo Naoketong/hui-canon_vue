@@ -7,7 +7,7 @@
         <div class="content-mainer">
         <div class="form-section">
             <div class="form-item">
-                <div class="form-text">客户名称：<span>{{orderData.guest_name}}</span></div>
+                <div class="form-text">客户名称：<span>{{orderData.name}}</span></div>
             </div>
             <div class="form-item">
                 <div class="form-text">联系电话：<span>{{orderData.phone}}</span></div>
@@ -20,7 +20,13 @@
                 <div class="form-text">创建时间：<span>{{orderData.order_date}}</span></div>
             </div>
             <div class="form-item">
-                <div class="form-text">订单状态：<span>{{orderData.order_state}}</span></div>
+                <div class="form-text">订单状态：
+                    <el-tag :type="orderData.order_state === 1 ? 'danger' : ''">
+                    {{ orderData.order_state === 1 ? "进行中" : "" }}
+                    {{ orderData.order_state === 2 ? "已完成" : "" }}
+                    {{ orderData.order_state === 3 ? "已取消" : "" }}
+                    </el-tag>
+                </div>
             </div>
 
 
@@ -29,7 +35,7 @@
 
 
             <div class="form-item">
-                <div class="form-text">车辆租赁费：<span>{{costData.cost_lease}}元</span></div>
+                <div class="form-text">车辆租赁费：<span>{{orderData.price}}元</span></div>
             </div>
             <div class="form-item">
                 <div class="form-text">基础服务费：<span>{{costData.cost_basis}}元</span></div>
@@ -43,27 +49,9 @@
             <div class="form-item">
                 <div class="form-text">费用总数：<span>{{orderData.cost_total}}元</span></div>
             </div>
-            
-            
-                <!-- <div class="form-item">
-                    <select id="clueUserId" class="form-input">
-                        <option value="0">请选择分配销售</option>
-                    </select>
-                </div> -->
-            
-            <!-- <div class="form-item">
-                <p class="form-text">备注：</p>
-                <textarea id="clueRemark" class="form-textarea" placeholder="备注信息">clue.remark}}</span></textarea>
-            </div> -->
-            <!-- <div class="form-item">
-            </div> -->
         </div>
 
-
         <div class="log-section">
-            
-            
-           
             
             <div class="form-item">
                 <div class="form-text">车型名字：<span>{{orderData.car_name}}</span></div>
@@ -73,7 +61,14 @@
             </div>
             <img class="car_img" :src="orderData.car_img" :alt="orderData.car_name">
             <div class="form-item">
-                <div class="form-text">车型级别：<span>{{orderData.level}}</span></div>
+                <div class="form-text">车型级别：
+                    {{ orderData.level === 0 ? "经济型" : "" }}
+                    {{ orderData.level === 1 ? "SUV" : "" }}
+                    {{ orderData.level === 2 ? "中级车" : "" }}
+                    {{ orderData.level === 3 ? "豪华型" : "" }}
+                    {{ orderData.level === 4 ? "商务型" : "" }}
+                    {{ orderData.level === 5 ? "6至15座商务车" : "" }}
+                </div>
             </div>
             <div class="form-item">
                 <div class="form-text">租借开始时间：<span>{{orderData.sat_at}}</span></div>
@@ -84,8 +79,16 @@
             <div class="form-item">
                 <div class="form-text">租借天数：<span>{{orderData.rent_days}}天</span></div>
             </div>
-           
-            
+            <div class="form-item">
+                <div class="form-text">订单状态切换：<br>
+                    <el-select v-model="order_state" style="margin:10px 20px 0 0 ;">
+                        <el-option label="继续进行" :value="1" />
+                        <el-option label="完成订单" :value="2" />
+                        <el-option label="取消订单" :value="3" />
+                    </el-select>
+                    <a @click="handButton">确定</a>
+                </div>
+            </div>           
             </div>
         </div>
         </div>
@@ -102,17 +105,52 @@
                 orderData: [],
                 costData:[],
                 car_id:'',
+                order_state: 1,
             }
         },
         created() {
             let id = this.$route.params.id;
             orderModel.show(id).then(res => {
+                console.log(res)
                 this.orderData = res.data[0];
                 let id = res.data[0].car_id
                 costModel.show(id).then( res => {
                     this.costData = res.data[0];
                 });
             });
+        },
+        methods:{
+            handButton: function(){
+                let id = this.orderData.order_number;
+                let order_state = this.order_state;
+                console.log(id,order_state)
+
+                this.$confirm('确定状态并返回订单主页, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                .then(()=>{
+                    return orderModel.modify(id,{order_state})
+                })
+                .then(()=>{
+                    this.$message({
+                    type: 'success',
+                    message: '切换状态成功!'
+                    });
+                    this.$router.push({
+                        name: "Order",
+                    });
+                })
+                .catch(() => {
+                    this.$message({
+                    type: 'info',
+                    message: '已取消切换状态'
+                    });
+                });
+
+            },
+             
         },
         components: {
             Layout,

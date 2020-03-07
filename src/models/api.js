@@ -11,9 +11,11 @@ export default {
     vehicle: PREFIX + '/vehicle',
     vehicleItem: (id) => `${PREFIX}/vehicle/${id}`,
     cost: PREFIX + '/cost',
+    orderFind: (id) => `${PREFIX}/order/phone/${id}`,
     costItem: (id) => `${PREFIX}/cost/${id}`,
     order: PREFIX + '/order',
     orderItem: (id) => `${PREFIX}/order/${id}`,
+    orderModify: (id) => `${PREFIX}/order/modify/${id}`,
 
 
 

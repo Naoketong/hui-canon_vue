@@ -137,6 +137,10 @@
           let id = this.formBoxID;
           let name = this.formBoxValue.name;
           let phone = this.formBoxValue.phone;
+          if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
+              this.$message.info('手机号码有误，请重填'); 
+              return ; 
+          } 
           let car_id = this.formBoxValue.car_id;
           let index = this.dataIndex;
           let params = { name, phone, car_id }

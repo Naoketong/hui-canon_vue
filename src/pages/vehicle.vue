@@ -130,7 +130,16 @@
       </div>
 
 
-
+     <el-pagination
+          v-if="pagination.total > pagination.pageSize"
+          background
+          layout="prev, pager, next"
+          :current-page.sync="pagination.currentPage"
+          :page-size="pagination.pageSize"
+          :total="pagination.total"
+          @current-change="getData"
+        >
+        </el-pagination>
     </Layout>
   
 
@@ -164,18 +173,40 @@
                 uploadLimit:{
                     size:2048,
                 },
-                
-                
                 btnloading:false,
+                pagination: {
+                    total: 0,
+                    currentPage: 1,
+                    pageSize: 10
+                },
+                
+
             }
         },
         created () {
-            vehicleModel.list().then( res => {
-            this.vehicleData = res.data;
-            })
+            // vehicleModel.list().then( res => {
+            // this.vehicleData = res.data.datas;
+            // })
+            this.getData();
             
         },
         methods: {
+            getData() {
+                let params = {
+                    current_page: this.pagination.currentPage,
+                    page_size: this.pagination.pageSize,
+                };
+                // console.log(params)
+                vehicleModel
+                    .list(params)
+                    .then(res => {
+                    console.log(res)
+                    this.vehicleData = res.data.datas;
+                    this.pagination.pageSize = Number(res.data.pagination.page_size);
+                    this.pagination.currentPage = Number(res.data.pagination.current_page);
+                    this.pagination.total = Number(res.data.pagination.total);
+                })
+            },
             handleOnPreview(file) {
                 window.open(file.url);
             },
