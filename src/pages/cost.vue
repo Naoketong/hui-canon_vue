@@ -106,7 +106,7 @@
                 console.log(res)
             });
             vehicleModel.list().then(res => {
-                this.vehicleDate = res.data;
+                this.vehicleDate = res.data.datas;
                 // console.log(this.vehicleDate)
             })
             

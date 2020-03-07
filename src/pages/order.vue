@@ -173,7 +173,7 @@
         },
         getVehicle(){
           vehicleModel.list().then(res => {
-            this.vehicleDate = res.data;
+            this.vehicleDate = res.data.datas;
           })
         },
         hadnSelect(){
