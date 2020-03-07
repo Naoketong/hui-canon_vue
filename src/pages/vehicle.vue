@@ -277,7 +277,7 @@
                 this.formBoxValue.level = data.level;
                 this.formBoxValue.car_displacement = data.car_displacement;
                 this.formBoxValue.car_structure =  data.car_structure;
-                this.formBoxValue.price = '';
+                this.formBoxValue.price = data.price;
                 this.formBoxShow = true;
                 this.dataIndex = index
             },
@@ -308,7 +308,7 @@
                         this.vehicleData[index].car_displacement = car_displacement
                         this.vehicleData[index].car_structure = car_structure;
                         this.vehicleData[index].price = price;
-                        // this.vehicleData[index].car_img = car_img
+                        this.vehicleData[index].car_img = car_img
                         this.formBoxShow = false;
                         this.$message.success('修改成功');
                     })
