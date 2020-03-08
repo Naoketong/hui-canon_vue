@@ -48,19 +48,31 @@
           <el-table-column
             prop="cost_basis"
             label="基础费">
+            <template slot-scope="scope">
+                {{scope.row.cost_basis}}元
+            </template>
           </el-table-column>
           
           <el-table-column
             prop="cost_servic"
             label="整备费">
+			 <template slot-scope="scope">
+                {{scope.row.cost_servic}}元
+            </template>
           </el-table-column>
           <el-table-column
             prop="cost_insurance"
             label="保险费">
+			 <template slot-scope="scope">
+                {{scope.row.cost_insurance}}元
+            </template>
           </el-table-column>
           <el-table-column
             prop="cost_total"
             label="除租赁总费用">
+			 <template slot-scope="scope">
+                {{scope.row.cost_total}}元
+            </template>
           </el-table-column>
          
           <el-table-column
