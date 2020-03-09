@@ -1,6 +1,5 @@
 <template>
     <Layout>
-        
         <div class="content-control">
         <a href="/admin/order">返回订单列表</a>
         </div>

@@ -89,8 +89,8 @@
             prop="operation"
             label="操作">
             <template slot-scope="scope">
-            <el-button  type="text" icon="el-icon-s-order" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>
-              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
+              <el-button  type="text" icon="el-icon-s-order" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>
+              <!--<el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>-->
               <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
             </template>
           </el-table-column>
@@ -183,13 +183,15 @@
         },
         getVehicle(){
           vehicleModel.list().then(res => {
-            this.vehicleDate = res.data.datas;
+            console.log(res)
+            this.vehicleDate = res.vehicle;
           })
         },
         hadnSelect(){
           // console.log(this.formBoxValue.car_id)
           let id = this.formBoxValue.car_id;
           costModel.show(id).then( res => {
+            // console.log(res)
               this.costData = res.data[0]
           })
           vehicleModel.show(id).then(res => {
@@ -253,21 +255,21 @@
           let total = this.costData.cost_total;//除租赁费以外的总费用
           // console.log(total)
           let price = this.formBoxValue.price;//车辆租赁费/天
-          console.log(this.vehicleDate)
+          // console.log(this.vehicleDate)
           let cost_total = Number(price) * Number(rent_days) + Number(total)
-
 
           // console.log(this.costData)
           console.log(total,'除租赁费总数')
           console.log(price,'租赁费')
           console.log(cost_total,'总费用')
 
-          
+          let params = {order_number, name, phone, car_id, sat_at, end_at, rent_days, cost_total }
+          console.log(params)
           if(!order_number || !name || !phone || !car_id || !sat_at || !end_at || !rent_days || !cost_total){
             this.$message.error('缺少必要参数')
             return
           }
-          let params = {order_number, name, phone, car_id, sat_at, end_at, rent_days, cost_total }
+          
           // 修改
           if(id){
             orderModel.update(id,params)
@@ -328,13 +330,7 @@
             params: { id }
           });
         },
-		btnaction() {
-//				location.reload()
-//              this.$router.go(0)
-                this.$router.replace({
-                	name:'Order'
-                })
-			},
+		    
 
       },
       components: {

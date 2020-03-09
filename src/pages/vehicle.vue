@@ -122,8 +122,9 @@
             prop="operation"
             label="操作">
             <template slot-scope="scope">
-              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
-              <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
+                <el-button  type="text" icon="el-icon-discount" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>
+                <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
+                <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -355,7 +356,14 @@
                     message: '已取消删除'
                     });
                 });
-            }
+            },
+            handledetails(row) {
+            const { id } = row;
+            this.$router.push({
+                name: "Vehicle_details",
+                params: { id }
+            });
+            },
         },
         components: {
             Layout,

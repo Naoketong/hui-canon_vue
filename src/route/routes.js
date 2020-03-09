@@ -2,9 +2,10 @@ import Login from '@/pages/Login'
 import User from '@/pages/User'
 import Order from '@/pages/order'
 import Cost from '@/pages/cost'
-import Over from '@/pages/over'
 import Admin_user from '@/pages/admin_user'
 import Vehicle from '@/pages/vehicle'
+import Vehicle_details from '@/pages/vehicle_details'
+import Over from '@/pages/over'
 import Order_details from '@/pages/order_details'
 
 
@@ -30,6 +31,12 @@ export default [{
         path: '/admin/vehicle',
         name: 'Vehicle',
         component: Vehicle,
+
+    },
+    {
+        path: '/admin/vehicle/:id',
+        name: 'Vehicle_details',
+        component: Vehicle_details,
 
     },
     {
