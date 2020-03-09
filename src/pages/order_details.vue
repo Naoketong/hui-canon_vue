@@ -28,6 +28,14 @@
                     </el-tag>
                 </div>
             </div>
+            <div class="form-item">
+                <div class="form-text">是否取车：
+                    <el-tag :type="orderData.get_car === 1 ? 'danger' : ''">
+                    {{ orderData.get_car === 1 ? "未取车" : "" }}
+                    {{ orderData.get_car === 2 ? "已取车" : "" }}
+                    </el-tag>
+                </div>
+            </div>
 
 
 

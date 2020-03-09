@@ -67,6 +67,16 @@
             </template>
           </el-table-column>
           <el-table-column
+            prop="order_state"
+            label="是否取车">
+            <template slot-scope="scope" >
+                <el-tag :type="scope.row.get_car === 1 ? 'danger' : ''">
+                {{ scope.row.get_car === 1 ? "未取车" : "" }}
+                {{ scope.row.get_car === 2 ? "已取车" : "" }}
+                </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
             prop="name"
             label="姓名">
           </el-table-column>
