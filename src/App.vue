@@ -1,16 +1,32 @@
 <template>
   <div id="app">
-    <router-view/>  
+    <router-view v-if="isRouterAlive"/>  
   </div>
   
 </template>
 
-<script lang="ts">
-// import { Component, Vue } from 'vue-property-decorator';
-// import HelloWorld from './components/HelloWorld.vue';
-
-
-// export default class App extends Vue {}
+<script lang="js">
+export default {
+  name: 'App',
+  provide () {
+    return {
+      reload: this.reload
+    }
+  },
+  data () {
+    return {
+      isRouterAlive: true
+    }
+  },
+  methods: {
+    reload () {
+      this.isRouterAlive = false
+      this.$nextTick(function () {
+        this.isRouterAlive = true
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss">

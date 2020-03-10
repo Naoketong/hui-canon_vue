@@ -93,6 +93,7 @@
     import costModel from '@/models/cost.js'
     import vehicleModel from '@/models/vehicle.js'
     export default {
+		inject:["reload"],
         data() {
             return{
                 fileList:[],
@@ -118,7 +119,7 @@
                 console.log(res)
             });
             vehicleModel.list().then(res => {
-                this.vehicleDate = res.data.datas;
+                this.vehicleDate = res.vehicle;
                 // console.log(this.vehicleDate)
             })
             
@@ -172,7 +173,9 @@
                         this.costData[index].cost_basis = cost_basis
                         this.costData[index].cost_servic = cost_servic
                         this.costData[index].cost_insurance = cost_insurance;
-                        // this.costData[index].car_img = car_img
+                        this.costData[index].car_img = car_img
+                        this.costData[index].car_name = car_name
+
                         this.formBoxShow = false;
                         this.$message.success('修改成功');
                     })
@@ -184,12 +187,14 @@
                     // 添加
                     costModel.add(params)
                     .then(res => {
+						this.reload();
                         console.log(res)
                         let id = res.data.id;
                         params.id = id;
                         this.costData.push(params)
                         this.formBoxShow = false;
                         this.$message.success('添加成功');
+						
                     })
                     .catch(()=>{
                         this.formBoxShow = false;
@@ -197,7 +202,7 @@
                 }
             },
             handleDelete(data,index) {
-                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
