@@ -13,11 +13,7 @@
               <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
             </el-form-item>
             <el-form-item label="手机" label-width="60px" prop="phone">
-				<el-input
-                  type="text"
-                  v-model="formBoxValue.phone"
-                  autocomplete="off"
-                ></el-input>
+				<el-input type="text" v-model="formBoxValue.phone" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="车型" label-width="60px">
                 <el-select v-model="formBoxValue.car_id" @change="hadnSelect">
@@ -90,7 +86,7 @@
             label="操作">
             <template slot-scope="scope">
               <el-button  type="text" icon="el-icon-s-order" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>
-              <!--<el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>-->
+              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
               <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
             </template>
           </el-table-column>
@@ -116,6 +112,7 @@
     import costModel from '@/models/cost.js'
 
     export default {
+	  inject:["reload"],
       data () {
         return {
           	orderData: [],
@@ -147,7 +144,8 @@
           	    currentPage: 1,
           	    pageSize: 10
           	},  
-			seekInput:'',
+			seekInput:'',//查找
+			iscar_id:'',
 			  
         }
       },
@@ -183,7 +181,7 @@
         },
         getVehicle(){
           vehicleModel.list().then(res => {
-            console.log(res)
+            // console.log(res)
             this.vehicleDate = res.vehicle;
           })
         },
@@ -227,6 +225,25 @@
           this.formBoxValue.data = data.data;
           this.formBoxShow = true;
           this.dataIndex = index
+		//   console.log(this.formBoxValue.car_id,'比较')
+		  let id = this.formBoxValue.car_id;
+          costModel.show(id).then( res => {
+              this.costData.cost_total = res.data[0].cost_total;
+          })
+          vehicleModel.show(id).then(res => {
+              this.formBoxValue.price = res.data[0].price;
+          })
+		  orderModel.show(data.id).then(res=>{
+			  
+			  this.iscar_id = res.data[0].car_id;
+			  console.log(this.iscar_id)
+		  })
+		  
+		// const { id } = row;
+        //   this.$router.push({
+        //     name: "Order_edit",
+        //     params: { id }
+        //   });
         },
         handleSave() {
           let order_number = ""; //订单号
@@ -262,8 +279,9 @@
           console.log(total,'除租赁费总数')
           console.log(price,'租赁费')
           console.log(cost_total,'总费用')
-
+		//   console.log(this.iscar_id)
           let params = {order_number, name, phone, car_id, sat_at, end_at, rent_days, cost_total }
+		  let param = {name, phone, car_id, sat_at, end_at, rent_days, cost_total }
           console.log(params)
           if(!order_number || !name || !phone || !car_id || !sat_at || !end_at || !rent_days || !cost_total){
             this.$message.error('缺少必要参数')
@@ -272,22 +290,34 @@
           
           // 修改
           if(id){
-            orderModel.update(id,params)
+            orderModel.update(id,param)
               .then(() => {
                 this.orderData[index].name = name
                 this.orderData[index].phone = phone
                 this.orderData[index].car_id = car_id
                 this.formBoxShow = false;
                 this.$message.success('修改成功');
+				let id = this.iscar_id;
+				let state = 0;
+				vehicleModel.update(id,{state})
               })
               .catch(()=>{
                 this.formBoxShow = false;
               })
+			   
+					
+
+
+
+			//   .then(res=>{
+			// 	  console.log(res)
+			//   })
           // // 添加
           }else{
             orderModel.add(params)
               .then(res => {
-                console.log(res)
+				this.reload();
+                // console.log(res)
                 let id = res.data.id;
                 params.id = id;
                 this.orderData.push(params)
@@ -299,6 +329,7 @@
               })
           }
         },
+		
         handleDelete(data,index) {
           this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
             confirmButtonText: '确定',
