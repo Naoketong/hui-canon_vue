@@ -7,7 +7,6 @@ import Vehicle from '@/pages/vehicle'
 import Vehicle_details from '@/pages/vehicle_details'
 import Over from '@/pages/over'
 import Order_details from '@/pages/order_details'
-import Order_edit from '@/pages/order_edit'
 
 
 export default [{
@@ -58,13 +57,6 @@ export default [{
         component: Order_details,
 
     },
-    {
-        path: '/admin/order/edit/:id',
-        name: 'Order_edit',
-        component: Order_edit,
-
-    },
-
     {
         path: '/admin/cost',
         name: 'Cost',
