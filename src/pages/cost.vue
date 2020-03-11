@@ -1,7 +1,7 @@
 <template>
     <Layout>
         <div class="pg-main-header">
-        <el-button type="primary" @click="handleAddUser">添加费用项</el-button>
+        <!--<el-button type="primary" @click="handleAddUser">添加费用项</el-button>-->
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form >
           <el-form-item label="车型" label-width="60px">

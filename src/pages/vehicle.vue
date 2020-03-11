@@ -53,6 +53,24 @@
                           
             </el-form-item>          
           </el-form>
+
+
+          <el-form v-if="formBoxCost">
+            <div style="font-size: 18px;color: #303133;margin-bottom: 10px;">添加费用项(必填)</div>
+            <el-form-item style="width:42%;" label="保险费" label-width="60px">
+              <el-input class="input-text cost" name="cost_insurance" width="100" v-model="formBoxValue.cost_insurance"></el-input>
+            </el-form-item> 
+           
+            
+            <el-form-item style="width:42%;" label="整备费" label-width="60px">
+              <el-input class="input-text cost" name="cost_servic" width="100" v-model="formBoxValue.cost_servic"></el-input>
+            </el-form-item>
+            <el-form-item style="width:42%;" label="基础服务费" label-width="90px">
+              <el-input class="input-text cost" name="cost_basis" width="100" v-model="formBoxValue.cost_basis"></el-input>
+            </el-form-item>
+                              
+          </el-form>
+          
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="handleSave">保存</el-button>
             <el-button @click="handleCancel">取消</el-button>
@@ -64,7 +82,6 @@
           :data="vehicleData"
           size="small"
           style="width: 100%">
-         
           <el-table-column
             prop="car_img"
             label="图片">
@@ -129,8 +146,6 @@
           </el-table-column>
         </el-table>
       </div>
-
-
      <el-pagination
           v-if="pagination.total > pagination.pageSize"
           background
@@ -158,6 +173,7 @@
                 dataIndex: null,
                 formBoxID: null,
                 formBoxShow: false,
+                formBoxCost:false,
                 formBoxTitle: '',
                 formBoxValue: {
                     car_name: '',
@@ -166,6 +182,10 @@
                     car_displacement:'',
                     car_structure:'',
                     price:'',
+
+                    cost_basis:'',
+                    cost_servic:'',
+                    cost_insurance:'',
 
                 },
                 formData:{
@@ -250,6 +270,7 @@
 
             handleAddUser() {
                 this.formBoxShow = true;
+                this.formBoxCost = true,
                 this.formBoxTitle = '添加车型';
                 this.formBoxID = '';
                 this.formBoxValue.car_name = '';
@@ -258,6 +279,9 @@
                 this.formBoxValue.car_displacement = '',
                 this.formBoxValue.car_structure = '';
                 this.formBoxValue.price = '';
+                this.cost_basis = '';
+                this.cost_servic = '';
+                this.cost_insurance = '';
             },
             handleCancel() {
                 this.formBoxShow = false;
@@ -269,9 +293,13 @@
                 this.formBoxValue.car_structure = '';
                 this.formBoxValue.price = '';
                 this.fileList = [];
+                this.cost_basis = '';
+                this.cost_servic = '';
+                this.cost_insurance = '';
             },
             handleEditUser(data,index) {
                 this.formBoxTitle = '编辑车型';
+                this.formBoxCost = false,
                 this.formBoxID = data.id;
                 this.formBoxValue.car_name = data.car_name;
                 this.formBoxValue.state = data.state;
@@ -280,23 +308,49 @@
                 this.formBoxValue.car_structure =  data.car_structure;
                 this.formBoxValue.price = data.price;
                 this.formBoxShow = true;
-                this.dataIndex = index
+                
+                this.dataIndex = index;
+                this.cost_basis = '';
+                this.cost_servic = '';
+                this.cost_insurance = '';
             },
             handleSave() {
                 this.fileList = [];
-                let id = this.formBoxID;
+                let id = this.formBoxID; 
+                let index = this.dataIndex;
                 let car_name = this.formBoxValue.car_name;
                 let state = this.formBoxValue.state;
                 let level = this.formBoxValue.level
-                let index = this.dataIndex;
                 let car_img = this.car_img;
                 let car_displacement = this.formBoxValue.car_displacement;
                 let car_structure = this.formBoxValue.car_structure;
                 let price = this.formBoxValue.price;
-                let params = { car_name, state, price, level, car_img, car_displacement, car_structure }
+
+                let cost_basis = this.formBoxValue.cost_basis;
+                let cost_servic = this.formBoxValue.cost_servic;
+                let cost_insurance = this.formBoxValue.cost_insurance
+
+
+                // let params = { car_name, state, price, level, car_img, car_displacement, car_structure }
+                let params = {
+                    car_name, 
+                    state, 
+                    price, 
+                    level, 
+                    car_img, 
+                    car_displacement, 
+                    car_structure,
+                    cost_basis,
+                    cost_servic,
+                    cost_insurance
+                    }
                 console.log(params)
-                // if(!name || !state || !){
-                //   this.$message.error('缺少必要参数')
+                // if(!car_name || !state || !level || !price || !car_img || !car_displacement || !car_structure){
+                //   this.$message.error('缺少必要参数(车型)')
+                //   return
+                // }
+                // if( !cost_basis || !cost_servic ||  !cost_insurance){
+                //   this.$message.error('缺少必要参数(费用)')
                 //   return
                 // }
                 // 修改
@@ -327,10 +381,14 @@
                         this.vehicleData.push(params)
                         this.formBoxShow = false;
                         this.$message.success('添加成功');
+                        this.cost_basis = '';
+                        this.cost_servic = '';
+                        this.cost_insurance = '';
                     })
                     .catch(()=>{
                         this.formBoxShow = false;
                     })
+                   
                 }
             },
             handleDelete(data,index) {
@@ -376,6 +434,9 @@
         display: inline-block;
     }
     .input-text{
+        width:194px;
+    }
+    .input-text.cost{
         width:194px;
     }
 </style>
