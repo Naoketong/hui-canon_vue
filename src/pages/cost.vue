@@ -187,7 +187,7 @@
                     // 添加
                     costModel.add(params)
                     .then(res => {
-						this.reload();
+						            this.reload();
                         console.log(res)
                         let id = res.data.id;
                         params.id = id;

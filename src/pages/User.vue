@@ -1,68 +1,75 @@
 <template>
     <Layout>
         <div class="pg-main-header">
-        <el-button type="primary" @click="handleAddUser">添加用户</el-button>
-        <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
-          <el-form :model="formBoxValue" :rules="Rules">
-            <el-form-item label="姓名" label-width="60px">
-                <el-input
-                  type="text"
-                  prefix-icon="el-icon-user"
-                  placeholder="请输入姓名"
-                  v-model="formBoxValue.name"
-                  autocomplete="off"
-                ></el-input>
-            </el-form-item>
-            <el-form-item label="手机" label-width="60px" prop="phone">
-                <el-input
-                  type="text"
-                  prefix-icon="el-icon-mobile-phone"
-                  placeholder="请输手机号"
-                  v-model="formBoxValue.phone"
-                  autocomplete="off"
-                ></el-input>
-            </el-form-item>
-            <!--<el-form-item label="车型" label-width="60px">
-                <el-select v-model="formBoxValue.car_id">
-                  <el-option v-for="item in vehicleDate" :label="item.car_name" :value="item.id" />
-                </el-select>
-            </el-form-item>-->
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="handleSave">保存</el-button>
-            <el-button @click="handleCancel">取消</el-button>
-          </div>
-        </el-dialog>
-      </div>
-      <div class="pg-main-body">
-        <el-table
-          :data="userData"
-          size="small"
-          style="width: 100%">
-          <el-table-column
-            prop="id"
-            label="id">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="姓名">
-          </el-table-column>
-          <el-table-column
-            prop="phone"
-            label="电话">
-          </el-table-column>
-          
-          <el-table-column
-            prop="operation"
-            label="操作">
-            <template slot-scope="scope">
-            <!--<el-button  type="text" icon="el-icon-user" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>-->
-              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
-              <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+			<el-button type="primary" @click="handleAddUser">添加用户</el-button>
+			<br>
+
+			<el-radio-group style="margin-top:20px;" v-model="radio1" @change="choose">
+				<el-radio-button label="online">线上用户</el-radio-button>
+				<el-radio-button label="offline">线下用户</el-radio-button>
+			</el-radio-group>
+			<el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
+			<el-form :model="formBoxValue" :rules="Rules">
+				<el-form-item label="姓名" label-width="60px">
+					<el-input
+					type="text"
+					prefix-icon="el-icon-user"
+					placeholder="请输入姓名"
+					v-model="formBoxValue.name"
+					autocomplete="off"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="手机" label-width="60px" prop="phone">
+					<el-input
+					type="text"
+					prefix-icon="el-icon-mobile-phone"
+					placeholder="请输手机号"
+					v-model="formBoxValue.phone"
+					autocomplete="off"
+					></el-input>
+				</el-form-item>
+				<!--<el-form-item label="车型" label-width="60px">
+					<el-select v-model="formBoxValue.car_id">
+					<el-option v-for="item in vehicleDate" :label="item.car_name" :value="item.id" />
+					</el-select>
+				</el-form-item>-->
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="handleSave">保存</el-button>
+				<el-button @click="handleCancel">取消</el-button>
+			</div>
+			</el-dialog>
+		</div>
+		<div class="pg-main-body">
+			<el-table
+			:data="userData"
+			:v-if="userData.open_id"
+			size="small"
+			style="width: 100%">
+			<el-table-column
+				prop="id"
+				label="id">
+			</el-table-column>
+			<el-table-column
+				prop="name"
+				label="姓名">
+			</el-table-column>
+			<el-table-column
+				prop="phone"
+				label="电话">
+			</el-table-column>
+			
+			<el-table-column
+				prop="operation"
+				label="操作">
+				<template slot-scope="scope">
+				<!--<el-button  type="text" icon="el-icon-user" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>-->
+				<el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
+				<el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
+				</template>
+			</el-table-column>
+			</el-table>
+		</div>
     </Layout>
 
 </template>
@@ -70,10 +77,12 @@
     import Layout from '@/components/Layout'
     import userModel from '@/models/user.js'
     import vehicleModel from '@/models/vehicle.js'
+    import orderModel from '@/models/order.js'
 
     export default {
       data () {
         return {
+			radio1: 'online',			
             userData: [],
             vehicleDate:[],
             dataIndex: null,
@@ -95,23 +104,34 @@
                 trigger: "blur"
                 }
             ],
-          // code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
+          // code: [{ required: true, message: "z请输入验证码", trigger: "blur" }]
       },
         }
       },
       created () {
         userModel.list().then( res => {
-          this.userData = res.data;
+          this.userData = res.data.userON_open;
         });
-        vehicleModel.list().then(res => {
-          this.vehicleDate = res.data;
-          console.log(this.vehicleDate)
-        })
+        // vehicleModel.list().then(res => {
+        //   this.vehicleDate = res.data;
+        // })
       },
       methods: {
+		choose(e){
+			// console.log(e)
+			if(e == 'online'){
+				userModel.list().then( res => {
+					this.userData = res.data.userON_open;
+				});
+			}else{
+				userModel.list().then( res => {
+					this.userData = res.data.userNo_openid;
+				});
+			}
+		},
         handleAddUser() {
           this.formBoxShow = true;
-          this.formBoxTitle = '添加用户';
+          this.formBoxTitle = '添加用户(仅添加线下用户，线上用户从移动端增加)';
           this.formBoxID = '';
           this.formBoxValue.name = '';
           this.formBoxValue.car_id = '';
