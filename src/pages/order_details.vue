@@ -130,15 +130,23 @@
             handButton: function(){
                 let id = this.orderData.order_number;
                 let order_state = this.order_state;
-                console.log(id,order_state)
-
+                let car_id = this.orderData.car_id;
+                let get_car = this.orderData.get_car;
+                console.log(get_car)
+                if(this.orderData.get_car == 2 && order_state == 3){
+                    this.$message({
+                    type: 'info',
+                    message: '客户已取车，无法取消订单!'
+                    });
+                    return
+                }
                 this.$confirm('确定状态并返回订单主页, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 })
                 .then(()=>{
-                    return orderModel.modify(id,{order_state})
+                    return orderModel.modify(id,{order_state,car_id})
                 })
                 .then(()=>{
                     this.$message({
