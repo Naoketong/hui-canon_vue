@@ -186,6 +186,9 @@
           }else{
             userModel.add(params)
               .then(res => {
+                if(res.code == 0){
+                  this.$message.info('添加失败，请检查电话是否相同');
+                }
                 console.log(res)
                 let id = res.data.id;
                 params.id = id;
