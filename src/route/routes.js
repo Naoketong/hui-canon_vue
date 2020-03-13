@@ -1,5 +1,6 @@
 import Login from '@/pages/Login'
 import User from '@/pages/User'
+import User_details from '@/pages/User_details'
 import Order from '@/pages/order'
 import Cost from '@/pages/cost'
 import Admin_user from '@/pages/admin_user'
@@ -12,7 +13,6 @@ import Order_details from '@/pages/order_details'
 export default [{
         path: '/',
         // redirect: { name: 'Login' },
-
     },
     {
         path: '/admin',
@@ -24,6 +24,12 @@ export default [{
         path: '/admin/user',
         name: 'User',
         component: User,
+
+    },
+    {
+        path: '/admin/user/:id',
+        name: 'User_details',
+        component: User_details,
 
     },
 
