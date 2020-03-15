@@ -24,6 +24,7 @@
                 <div class="block">
                     <el-date-picker
                     v-model="formBoxValue.data"
+					:picker-options="expireTimeOption"
                     type="daterange"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -131,14 +132,20 @@
 				},   
 				Rules: {
 				phone: [
-				{ required: true, message: "请输入手机号", trigger: "blur" },
-				{
-					pattern: /^1[3456789]\d{9}$/,
-					message: "目前只支持中国大陆的手机号码",
-					trigger: "blur"
-				}
-				],
-				},    
+					{ required: true, message: "请输入手机号", trigger: "blur" },
+					{
+						pattern: /^1[3456789]\d{9}$/,
+						message: "目前只支持中国大陆的手机号码",
+						trigger: "blur"
+					}
+					],
+				},   
+				expireTimeOption: {
+					disabledDate(time) {
+						return time.getTime() < Date.now() - 8.64e7;   //禁用以前的日期，今天不禁用
+						// return date.getTime() <= Date.now();    //禁用今天以及以前的日期
+					}
+				},
 				pagination: {
 					total: 0,
 					currentPage: 1,
@@ -146,6 +153,7 @@
 				},  
 				seekInput:'',//查找
 				iscar_id:'',//编辑车辆 原来车辆的id
+				user_id:'',//用户id
 				
 			}
     	},
@@ -198,7 +206,7 @@
 			},
 			handleAddUser() {
 				this.formBoxShow = true;
-				this.formBoxTitle = '添加订单';
+				this.formBoxTitle = '添加订单(仅添加线下订单)';
 				this.formBoxID = '';
 				this.formBoxValue.name = '';
 				this.formBoxValue.car_id = '';
@@ -263,8 +271,8 @@
 				let d2 = new Date(end_at);
 				let rent_days = (d2 - d1) / (24 * 60 * 60 * 1000)
 				if(!this.costData.cost_total){
-				this.$message.error('没有添加费用项，无法生成订单')
-				return
+					this.$message.error('没有添加费用项，无法生成订单')
+					return
 				}
 				let total = this.costData.cost_total;//除租赁费以外的总费用
 				// console.log(total)
@@ -305,12 +313,13 @@
 				}else{
 				orderModel.add(params)
 					.then(res => {
+						conosle.log(res)
 						this.reload();
-					let id = res.data.id;
-					params.id = id;
-					this.orderData.push(params)
-					this.formBoxShow = false;
-					this.$message.success('添加成功');
+						let id = res.data.id;
+						params.id = id;
+						this.orderData.push(params)
+						this.formBoxShow = false;
+						this.$message.success('添加成功');
 					})
 					.catch(()=>{
 					this.formBoxShow = false;
