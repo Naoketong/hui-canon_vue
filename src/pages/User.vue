@@ -43,7 +43,6 @@
 		<div class="pg-main-body">
 			<el-table
 			:data="userData"
-			:v-if="userData.open_id"
 			size="small"
 			style="width: 100%">
 			<el-table-column
@@ -110,7 +109,7 @@
       },
       created () {
         userModel.list().then( res => {
-          this.userData = res.data.userON_open;
+          this.userData = res.data.userOnline;;
         });
         // vehicleModel.list().then(res => {
         //   this.vehicleDate = res.data;
@@ -121,11 +120,11 @@
 			// console.log(e)
 			if(e == 'online'){
 				userModel.list().then( res => {
-					this.userData = res.data.userON_open;
+					this.userData = res.data.userOnline;
 				});
 			}else{
 				userModel.list().then( res => {
-					this.userData = res.data.userNo_openid;
+					this.userData = res.data.userOffline;
 				});
 			}
 		},
@@ -155,6 +154,7 @@
         },
         handleSave() {
           let id = this.formBoxID;
+          let is_online = 2;
           let name = this.formBoxValue.name;
           let phone = this.formBoxValue.phone;
           if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
@@ -163,7 +163,7 @@
           } 
           let car_id = this.formBoxValue.car_id;
           let index = this.dataIndex;
-          let params = { name, phone, car_id }
+          let params = { name, phone, car_id, is_online }
           console.log(params,id,'id')
           // if(!name || !phone || !car_id){
           //   this.$message.error('缺少必要参数')
