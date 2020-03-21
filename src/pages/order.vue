@@ -189,8 +189,8 @@
 			},
 			getVehicle(){
 				vehicleModel.list().then(res => {
-				// console.log(res)
-				this.vehicleDate = res.vehicleFree;
+				console.log(res)
+				this.vehicleDate = res.data.vehicleFree;
 				})
 			},
 			hadnSelect(){
@@ -311,10 +311,10 @@
 
 				// // 添加
 				}else{
-				orderModel.add(params)
+					orderModel.add(params)
 					.then(res => {
 						conosle.log(res)
-						this.reload();
+						
 						let id = res.data.id;
 						params.id = id;
 						this.orderData.push(params)
@@ -324,6 +324,7 @@
 					.catch(()=>{
 					this.formBoxShow = false;
 					})
+					this.reload();
 				}
 			},
 

@@ -363,7 +363,10 @@
                         this.vehicleData[index].car_displacement = car_displacement
                         this.vehicleData[index].car_structure = car_structure;
                         this.vehicleData[index].price = price;
-                        this.vehicleData[index].car_img = car_img
+                        this.vehicleData[index].car_img = car_img;
+                        this.formBoxValue.cost_basis = '';
+                        this.formBoxValue.cost_servic = '';
+                        this.formBoxValue.cost_insurance = '';
                         this.formBoxShow = false;
                         this.$message.success('修改成功');
                     })
@@ -381,9 +384,9 @@
                         this.vehicleData.push(params)
                         this.formBoxShow = false;
                         this.$message.success('添加成功');
-                        this.cost_basis = '';
-                        this.cost_servic = '';
-                        this.cost_insurance = '';
+                        this.formBoxValue.cost_basis = '';
+                        this.formBoxValue.cost_servic = '';
+                        this.formBoxValue.cost_insurance = '';
                     })
                     .catch(()=>{
                         this.formBoxShow = false;

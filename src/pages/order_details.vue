@@ -56,6 +56,16 @@
             <div class="form-item">
                 <div class="form-text">费用总数：<span>{{orderData.cost_total}}元</span></div>
             </div>
+             <div class="form-item">
+                <div class="form-text">订单状态切换：<br>
+                    <el-select v-model="get_car" style="margin:10px 20px 0 0 ;">
+                        <el-option label="确定取车" :value="2" />
+                        <el-option label="取消取车" :value="1" />
+                    </el-select>
+                    <a @click="handButton_car">确定</a>
+                </div>
+            </div>           
+            
         </div>
 
         <div class="log-section">
@@ -89,7 +99,7 @@
             <div class="form-item">
                 <div class="form-text">订单状态切换：<br>
                     <el-select v-model="order_state" style="margin:10px 20px 0 0 ;">
-                        <el-option label="继续进行" :value="1" />
+                        <!--<el-option label="继续进行" :value="1" />-->
                         <el-option label="完成订单" :value="2" />
                         <el-option label="取消订单" :value="3" />
                     </el-select>
@@ -107,12 +117,14 @@
     import orderModel from '@/models/order.js'
     import costModel from '@/models/cost.js'
     export default {
+        inject:["reload"],
         data() {
             return {
                 orderData: [],
                 costData:[],
                 car_id:'',
-                order_state: 1,
+                order_state: '请选择状态',
+                get_car:'请确定是否取车',
             }
         },
         created() {
@@ -127,6 +139,59 @@
             });
         },
         methods:{
+            handButton_car: function(){
+                let id = this.orderData.order_number;
+                let get_car = this.get_car;
+                console.log(get_car)
+                if(get_car == 2){
+                    this.$confirm('确定客户已到店及确定取车吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    })
+                    .then(()=>{
+                        return orderModel.modify(id,{get_car})
+                        
+                    })
+                    .then(()=>{
+                        this.reload();
+                        this.$message({
+                        type: 'success',
+                        message: '成功切换状态!'
+                        });
+                    })
+                    .catch(() => {
+                        this.$message({
+                        type: 'info',
+                        message: '已取消切换状态'
+                        });
+                    });
+                }else{
+                    this.$confirm('确定客户放弃取车吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    })
+                    .then(()=>{
+                        return orderModel.modify(id,{get_car})
+                        
+                    })
+                    .then(()=>{
+                        this.reload();
+                        this.$message({
+                        type: 'success',
+                        message: '成功切换状态!'
+                        });
+                    })
+                    .catch(() => {
+                        this.$message({
+                        type: 'info',
+                        message: '已取消切换状态'
+                        });
+                    });
+                }
+
+            },
             handButton: function(){
                 let id = this.orderData.order_number;
                 let order_state = this.order_state;

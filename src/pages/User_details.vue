@@ -74,8 +74,11 @@
     	created () {
     	  let id = this.$route.params.id;
           userModel.show(id).then(res => {
-                console.log(res)
-                this.user_orderData = res.data;
+				if(res.data[0].id !== null){
+					this.user_orderData = res.data;
+					// console.log(this.user_orderData)
+				}
+                
             });
     	},
     	methods: {
