@@ -56,8 +56,8 @@
             <div class="form-item">
                 <div class="form-text">费用总数：<span>{{orderData.cost_total}}元</span></div>
             </div>
-             <div class="form-item">
-                <div class="form-text">订单状态切换：<br>
+             <div class="form-item"  v-show="not_getCar">
+                <div class="form-text">取车状态切换：<br>
                     <el-select v-model="get_car" style="margin:10px 20px 0 0 ;">
                         <el-option label="确定取车" :value="2" />
                         <el-option label="取消取车" :value="1" />
@@ -125,6 +125,7 @@
                 car_id:'',
                 order_state: '请选择状态',
                 get_car:'请确定是否取车',
+                not_getCar:true,
             }
         },
         created() {
@@ -136,6 +137,12 @@
                 costModel.show(id).then( res => {
                     this.costData = res.data[0];
                 });
+                // console.log(res[0].get_car)
+                if(res.data[0].get_car == 1){
+                    this.not_getCar = true;
+                }else{
+                    this.not_getCar = false
+                }
             });
         },
         methods:{
