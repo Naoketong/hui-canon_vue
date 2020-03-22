@@ -1,7 +1,16 @@
 <template>
     <Layout>
         <div class="pg-main-header">
-        <el-button type="primary" @click="handleAddUser">添加车型</el-button>
+        <el-button type="primary" @click="handleAddUser">添加车型</el-button><br>
+        <el-radio-group style="margin-top:20px;" v-model="radio1" @change="choose">
+            <el-radio-button label="vehicle">全部车型</el-radio-button>
+			<el-radio-button label="0">经济型</el-radio-button>
+			<el-radio-button label="1">SUV</el-radio-button>
+            <el-radio-button label="2">中级车</el-radio-button>
+            <el-radio-button label="3">豪华型</el-radio-button>
+            <el-radio-button label="4">商务型</el-radio-button>
+            <el-radio-button label="5">6至15座商务车</el-radio-button>
+		</el-radio-group>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form class="handEdit">
             <el-form-item label="车名" label-width="60px">
@@ -167,6 +176,7 @@
     export default {
         data() {
             return{
+                radio1: 'vehicle',			
                 fileList:[],
                 car_img:'',
                 vehicleData:[],
@@ -205,13 +215,23 @@
             }
         },
         created () {
-            // vehicleModel.list().then( res => {
-            // this.vehicleData = res.data.datas;
-            // })
             this.getData();
-            
         },
         methods: {
+            choose(e){
+                if(e == 'vehicle'){
+                    this.getData();
+                    console.log(878989)
+                }
+                // console.log(e)
+                let level = e;
+                console.log(level)
+                vehicleModel.level({level}).then(res=>{
+                    this.vehicleData = res.data.vehicle;
+                })
+            },
+            
+
             getData() {
                 let params = {
                     current_page: this.pagination.currentPage,

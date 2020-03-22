@@ -22,5 +22,8 @@ export default {
     },
     delete(id) {
         return request.delete(API.vehicleItem(id))
+    },
+    level(params) {
+        return request.post(API.vehicleLevel, params);
     }
 }

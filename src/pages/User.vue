@@ -103,7 +103,6 @@
                 trigger: "blur"
                 }
             ],
-          // code: [{ required: true, message: "z请输入验证码", trigger: "blur" }]
       },
         }
       },
@@ -111,13 +110,10 @@
         userModel.list().then( res => {
           this.userData = res.data.userOnline;;
         });
-        // vehicleModel.list().then(res => {
-        //   this.vehicleDate = res.data;
-        // })
+        
       },
       methods: {
 		choose(e){
-			// console.log(e)
 			if(e == 'online'){
 				userModel.list().then( res => {
 					this.userData = res.data.userOnline;
