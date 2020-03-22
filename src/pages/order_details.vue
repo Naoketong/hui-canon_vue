@@ -131,7 +131,7 @@
         created() {
             let id = this.$route.params.id;
             orderModel.show(id).then(res => {
-                console.log(res)
+                // console.log(res)
                 this.orderData = res.data[0];
                 let id = res.data[0].car_id
                 costModel.show(id).then( res => {

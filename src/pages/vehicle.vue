@@ -221,11 +221,10 @@
             choose(e){
                 if(e == 'vehicle'){
                     this.getData();
-                    console.log(878989)
                 }
                 // console.log(e)
                 let level = e;
-                console.log(level)
+                // console.log(level)
                 vehicleModel.level({level}).then(res=>{
                     this.vehicleData = res.data.vehicle;
                 })
@@ -241,7 +240,7 @@
                 vehicleModel
                     .list(params)
                     .then(res => {
-                    console.log(res)
+                    // console.log(res)
                     this.vehicleData = res.data.datas;
                     this.pagination.pageSize = Number(res.data.pagination.page_size);
                     this.pagination.currentPage = Number(res.data.pagination.current_page);

@@ -116,7 +116,7 @@
         created () {
             costModel.list().then( res => {
                 this.costData = res.data;
-                console.log(res)
+                // console.log(res)
             });
             vehicleModel.list().then(res => {
                 this.vehicleDate = res.vehicle;

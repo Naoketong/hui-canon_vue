@@ -63,7 +63,7 @@
 				label="操作">
 				<template slot-scope="scope">
 				<el-button  type="text" icon="el-icon-user" @click="handledetails(scope.row,scope.$index)">查看订单</el-button>
-				<el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
+				<el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)" v-show="userEditShow">编辑</el-button>
 				<el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -87,6 +87,7 @@
             dataIndex: null,
             formBoxID: null,
             formBoxShow: false,
+			userEditShow:true,
             formBoxTitle: '',
             formBoxValue: {
                 name: '',
@@ -103,7 +104,7 @@
                 trigger: "blur"
                 }
             ],
-      },
+      	},
         }
       },
       created () {
@@ -117,10 +118,16 @@
 			if(e == 'online'){
 				userModel.list().then( res => {
 					this.userData = res.data.userOnline;
+					if(res.data.userOnline[0].is_online === 1){
+						this.userEditShow = false ;
+					}
 				});
 			}else{
 				userModel.list().then( res => {
 					this.userData = res.data.userOffline;
+					if(res.data.userOffline[0].is_online === 2){
+						this.userEditShow = true;
+					}
 				});
 			}
 		},

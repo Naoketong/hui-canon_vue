@@ -189,7 +189,7 @@
 			},
 			getVehicle(){
 				vehicleModel.list().then(res => {
-				console.log(res)
+				// console.log(res)
 				this.vehicleDate = res.data.vehicleFree;
 				})
 			},

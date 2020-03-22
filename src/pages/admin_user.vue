@@ -165,7 +165,7 @@
       }else{
         userModel.add(params)
           .then(res => {
-            console.log(res)
+            // console.log(res)
             if(res.code == 0){
               this.$message.info('添加失败，请检查电话是否相同');
             }
@@ -183,9 +183,9 @@
     handleDelete(data,index) {
       
       
-let isdeleted = 1;
-let params = {isdeleted}
-console.log(params)
+		let isdeleted = 1;
+		let params = {isdeleted}
+		// console.log(params)
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

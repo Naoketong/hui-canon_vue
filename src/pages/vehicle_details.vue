@@ -79,9 +79,8 @@
         },
         created() {
             let id = this.$route.params.id;
-            console.log(id,'146')
             vehicleModel.show(id).then(res => {
-                console.log(res)
+                // console.log(res)
                 this.vehicleData = res.data[0];
                 let id = res.data[0].id
                 costModel.show(id).then( res => {
