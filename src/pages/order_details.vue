@@ -165,11 +165,15 @@
                         
                     })
                     .then(()=>{
-                        this.reload();
+                        // this.reload();
                         this.$message({
                         type: 'success',
                         message: '成功切换状态!'
                         });
+                        this.$router.push({
+                            name: "Order",
+                        });
+                        
                     })
                     .catch(() => {
                         this.$message({
@@ -177,6 +181,7 @@
                         message: '已取消切换状态'
                         });
                     });
+                    
                 }else{
                     this.$confirm('确定客户放弃取车吗?', '提示', {
                         confirmButtonText: '确定',
@@ -265,6 +270,7 @@
         background-color: #409EFF;
         border-color: #409EFF;
         text-decoration: none;
+        cursor:pointer;
     }
     .car_img{
         width:130px;

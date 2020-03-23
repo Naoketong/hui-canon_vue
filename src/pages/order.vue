@@ -87,8 +87,10 @@
             label="操作">
             <template slot-scope="scope">
               <el-button  type="text" icon="el-icon-s-order" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>
-              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
-              <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
+              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)" 
+			  v-show="scope.row.order_state == 1 && scope.row.get_car === 1">编辑</el-button>
+              <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)"
+			  v-show="scope.row.order_state == 2 || scope.row.order_state === 3">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -124,11 +126,11 @@
 				formBoxShow: false,
 				formBoxTitle: '',
 				formBoxValue: {
-				name: '',
-				phone: '',
-				car_id: '',
-				data:[],
-				price:'',
+					name: '',
+					phone: '',
+					car_id: '',
+					data:[],
+					price:'',
 				},   
 				Rules: {
 				phone: [
@@ -154,6 +156,7 @@
 				seekInput:'',//查找
 				iscar_id:'',//编辑车辆 原来车辆的id
 				user_id:'',//用户id
+				order_results:true,
 				
 			}
     	},
@@ -286,7 +289,7 @@
 				// console.log(cost_total,'总费用')
 				let params = {order_number, name, phone, car_id, sat_at, end_at, rent_days, cost_total }
 				let param = {name, phone, car_id, sat_at, end_at, rent_days, cost_total }
-				// console.log(params)
+				console.log(params)
 				if(!order_number || !name || !phone || !car_id || !sat_at || !end_at || !rent_days || !cost_total){
 				this.$message.error('缺少必要参数')
 				return
