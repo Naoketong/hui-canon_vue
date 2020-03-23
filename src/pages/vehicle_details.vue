@@ -19,7 +19,7 @@
                         {{ vehicleData.level === 1 ? "SUV" : "" }}
                         {{ vehicleData.level === 2 ? "中级车" : "" }}
                         {{ vehicleData.level === 3 ? "豪华型" : "" }}
-                        {{ vehicleData.level === 4 ? "商务型" : "" }}
+                        {{ vehicleData.level === 4 ? "MPV" : "" }}
                         {{ vehicleData.level === 5 ? "6至15座商务车" : "" }}
                     </div>
                 </div>

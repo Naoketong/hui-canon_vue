@@ -8,7 +8,7 @@
 			<el-radio-button label="1">SUV</el-radio-button>
             <el-radio-button label="2">中级车</el-radio-button>
             <el-radio-button label="3">豪华型</el-radio-button>
-            <el-radio-button label="4">商务型</el-radio-button>
+            <el-radio-button label="4">MPV</el-radio-button>
             <el-radio-button label="5">6至15座商务车</el-radio-button>
 		</el-radio-group>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
@@ -29,7 +29,7 @@
                     <el-option label="SUV" :value="1" />
                     <el-option label="中级车" :value="2" />
                     <el-option label="豪华型" :value="3" />
-                    <el-option label="商务型" :value="4" />
+                    <el-option label="MPV" :value="4" />
                     <el-option label="6至15座商务车" :value="5" />
                 </el-select>
             </el-form-item>
@@ -113,7 +113,7 @@
                 {{ scope.row.level === 1 ? "SUV" : "" }}
                 {{ scope.row.level === 2 ? "中级车" : "" }}
                 {{ scope.row.level === 3 ? "豪华型" : "" }}
-                {{ scope.row.level === 4 ? "商务型" : "" }}
+                {{ scope.row.level === 4 ? "MPV" : "" }}
                 {{ scope.row.level === 5 ? "6至15座商务车" : "" }}
             </template>
           </el-table-column>
