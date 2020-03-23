@@ -127,29 +127,36 @@
                 get_car:'请确定是否取车',
                 not_getCar:true,
                 order_results:true,
+                name:'',
             }
         },
         created() {
-            let id = this.$route.params.id;
-            orderModel.show(id).then(res => {
-                // console.log(res)
-                this.orderData = res.data[0];
-                let id = res.data[0].car_id
-                costModel.show(id).then( res => {
-                    this.costData = res.data[0];
-                });
-                // console.log(res[0].get_car)
-                if(res.data[0].get_car == 1){
-                    this.not_getCar = true;
-                }else{
-                    this.not_getCar = false
-                }
-                if(res.data[0].order_state == 2 || res.data[0].order_state == 3){
-                    this.order_results = false;
-                }
-            });
+            this.order();
+            
         },
         methods:{
+            order:function(){
+                let id = this.$route.params.id;
+                orderModel.show(id).then(res => {
+                    // console.log(res.data[0].name)
+                    this.orderData = res.data[0];
+                    this.name = res.data[0].name;
+                    let id = res.data[0].car_id
+                    costModel.show(id).then( res => {
+                        this.costData = res.data[0];
+                    });
+                    // console.log(res[0].get_car)
+                    if(res.data[0].get_car == 1){
+                        this.not_getCar = true;
+                    }else{
+                        this.not_getCar = false
+                    }
+                    if(res.data[0].order_state == 2 || res.data[0].order_state == 3){
+                        this.order_results = false;
+                        this.not_getCar = false;
+                    }
+                });
+            },
             handButton_car: function(){
                 let id = this.orderData.order_number;
                 let get_car = this.get_car;
