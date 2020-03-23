@@ -22,9 +22,7 @@
             <el-form-item label="结构" label-width="60px">
               <el-input class="input-text" name="car_structure" width="200" v-model="formBoxValue.car_structure"></el-input>
             </el-form-item>
-            <el-form-item label="价格" label-width="60px">
-              <el-input class="input-text" name="price" width="200" v-model="formBoxValue.price"></el-input>
-            </el-form-item>
+           
             <el-form-item label="级别" label-width="60px">          
                 <el-select v-model="formBoxValue.level">
                     <el-option label="经济型" :value="0" />
@@ -43,8 +41,7 @@
                     <el-option label="维修保养" :value="2" />
                 </el-select>
             </el-form-item>
-
-
+            <br>
             <el-form-item label="上传文件" prop="file_id">
                 <el-upload
                     class="upload-demo"
@@ -66,6 +63,9 @@
 
           <el-form v-if="formBoxCost">
             <div style="font-size: 18px;color: #303133;margin-bottom: 10px;">添加费用项(必填)</div>
+             <el-form-item style="width:42%;" label="价格" label-width="60px">
+              <el-input class="input-text cost" name="price" width="200" v-model="formBoxValue.price"></el-input>
+            </el-form-item>
             <el-form-item style="width:42%;" label="保险费" label-width="60px">
               <el-input class="input-text cost" name="cost_insurance" width="100" v-model="formBoxValue.cost_insurance"></el-input>
             </el-form-item> 
@@ -362,6 +362,17 @@
                     cost_basis,
                     cost_servic,
                     cost_insurance
+                }
+                let paramsedit = {
+                    car_name, 
+                    state, 
+                    price, 
+                    level, 
+                    car_displacement, 
+                    car_structure,
+                    cost_basis,
+                    cost_servic,
+                    cost_insurance
                     }
                 console.log(params)
                 // if(!car_name || !state || !level || !price || !car_img || !car_displacement || !car_structure){
@@ -374,7 +385,7 @@
                 // }
                 // 修改
                 if(id){
-                    vehicleModel.update(id,params)
+                    vehicleModel.update(id,paramsedit)
                     .then(() => {
                         this.vehicleData[index].car_name = car_name;
                         this.vehicleData[index].state = state;
@@ -382,11 +393,12 @@
                         this.vehicleData[index].car_displacement = car_displacement
                         this.vehicleData[index].car_structure = car_structure;
                         this.vehicleData[index].price = price;
-                        this.vehicleData[index].car_img = car_img;
+                        // this.vehicleData[index].car_img = car_img;
                         this.formBoxValue.cost_basis = '';
                         this.formBoxValue.cost_servic = '';
                         this.formBoxValue.cost_insurance = '';
                         this.formBoxShow = false;
+                        this.vehicleData.splice(index,1)
                         this.$message.success('修改成功');
                     })
                     .catch(()=>{

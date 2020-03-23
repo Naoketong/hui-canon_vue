@@ -281,12 +281,12 @@
 				let cost_total = Number(price) * Number(rent_days) + Number(total)
 
 				// console.log(this.costData)
-				console.log(total,'除租赁费总数')
-				console.log(price,'租赁费')
-				console.log(cost_total,'总费用')
+				// console.log(total,'除租赁费总数')
+				// console.log(price,'租赁费')
+				// console.log(cost_total,'总费用')
 				let params = {order_number, name, phone, car_id, sat_at, end_at, rent_days, cost_total }
 				let param = {name, phone, car_id, sat_at, end_at, rent_days, cost_total }
-				console.log(params)
+				// console.log(params)
 				if(!order_number || !name || !phone || !car_id || !sat_at || !end_at || !rent_days || !cost_total){
 				this.$message.error('缺少必要参数')
 				return

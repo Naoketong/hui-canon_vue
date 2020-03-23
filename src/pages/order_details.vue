@@ -149,7 +149,7 @@
             handButton_car: function(){
                 let id = this.orderData.order_number;
                 let get_car = this.get_car;
-                console.log(get_car)
+                // console.log(get_car)
                 if(get_car == 2){
                     this.$confirm('确定客户已到店及确定取车吗?', '提示', {
                         confirmButtonText: '确定',
@@ -204,7 +204,7 @@
                 let order_state = this.order_state;
                 let car_id = this.orderData.car_id;
                 let get_car = this.orderData.get_car;
-                console.log(get_car)
+                // console.log(get_car)
                 if(this.orderData.get_car == 2 && order_state == 3){
                     this.$message({
                     type: 'info',
