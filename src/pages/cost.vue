@@ -125,9 +125,8 @@
         },
         created () {
             costModel.list().then( res => {
-				console.log(res)
                 this.costData = res.data;
-                // console.log(res)
+                console.log(this.costData)
             });
             // vehicleModel.list().then(res => {
             //     this.vehicleDate = res.vehicle;
@@ -172,7 +171,6 @@
                 let cost_servic = this.formBoxValue.cost_servic;
                 let cost_insurance = this.formBoxValue.cost_insurance;
 				let price = this.formBoxValue.price;
-				console.log(price,'7854')
                 let index = this.dataIndex;
                 let params = { car_id, cost_basis, cost_servic,  cost_insurance}
                 console.log(params)
@@ -187,27 +185,26 @@
                     .then(() => {
 						let id = car_id;
 						vehicleModel.update(id,{price})
+						this.costData[index].price = price;
                         this.costData[index].car_id = car_id
                         this.costData[index].cost_basis = cost_basis
                         this.costData[index].cost_servic = cost_servic
                         this.costData[index].cost_insurance = cost_insurance;
                         this.costData[index].car_img = car_img;
-                        // this.costData[index].car_name = car_name;
-						this.costData[index].price = price;
+						
 
                         this.formBoxShow = false;
                         this.$message.success('修改成功');
+						
                     })
                     .catch(()=>{
                         this.formBoxShow = false;
                     })
-                
                 }else{
                     // 添加
                     costModel.add(params)
                     .then(res => {
 						this.reload();
-                        console.log(res)
                         let id = res.data.id;
                         params.id = id;
                         this.costData.push(params)
