@@ -96,7 +96,7 @@
             <div class="form-item">
                 <div class="form-text">租借天数：<span>{{orderData.rent_days}}天</span></div>
             </div>
-            <div class="form-item">
+            <div class="form-item" v-show="order_results">
                 <div class="form-text">订单状态切换：<br>
                     <el-select v-model="order_state" style="margin:10px 20px 0 0 ;">
                         <!--<el-option label="继续进行" :value="1" />-->
@@ -126,6 +126,7 @@
                 order_state: '请选择状态',
                 get_car:'请确定是否取车',
                 not_getCar:true,
+                order_results:true,
             }
         },
         created() {
@@ -142,6 +143,9 @@
                     this.not_getCar = true;
                 }else{
                     this.not_getCar = false
+                }
+                if(res.data[0].order_state == 2 || res.data[0].order_state == 3){
+                    this.order_results = false;
                 }
             });
         },
