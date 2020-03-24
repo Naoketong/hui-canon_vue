@@ -30,8 +30,30 @@ export default {
   },
   methods: {
     logout (){
-      localStorage.clear();
-      this.$router.replace({ name: 'Login'});
+      this.$confirm('确定退出吗?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+				})
+				.then(()=>{
+				
+				localStorage.clear();
+        this.$router.replace({ name: 'Login'});
+				})
+				
+				.catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消'
+				});
+				});
+
+
+
+
+
+
+      
     }
   },
   components: {

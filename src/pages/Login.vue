@@ -34,6 +34,7 @@
                     v-model="smsFrom.password"
                     autocomplete="off"
                     prefix-icon="el-icon-mobile"
+                    show-password
                   ></el-input>
                 
                 </div>

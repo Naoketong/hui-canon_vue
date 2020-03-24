@@ -9,7 +9,7 @@
                   <el-option v-for="item in vehicleDate" :label="item.car_name" :value="item.id" />
                 </el-select>
             </el-form-item>-->
-			 <el-form-item label="租赁费（天）" label-width="100px">
+			<el-form-item label="租赁费（天）" label-width="100px">
               <el-input name="price" width="100" v-model="formBoxValue.price"></el-input>
             </el-form-item><br>
             <el-form-item label="基础服务费" label-width="90px">
