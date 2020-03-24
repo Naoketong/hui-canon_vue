@@ -156,13 +156,15 @@
         </el-table>
       </div>
      <el-pagination
-          v-if="pagination.total > pagination.pageSize"
-          background
-          layout="prev, pager, next"
-          :current-page.sync="pagination.currentPage"
-          :page-size="pagination.pageSize"
-          :total="pagination.total"
-          @current-change="getData"
+
+        v-show="paging"
+        v-if="pagination.total > pagination.pageSize"
+        background
+        layout="prev, pager, next"
+        :current-page.sync="pagination.currentPage"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        @current-change="getData"
         >
         </el-pagination>
     </Layout>
@@ -210,6 +212,7 @@
                     currentPage: 1,
                     pageSize: 10
                 },
+                paging:false,
                 
 
             }
@@ -221,13 +224,13 @@
             choose(e){
                 if(e == 'vehicle'){
                     this.getData();
+                }else if(e !== 'vehicle'){
+                    let level = e;
+                    vehicleModel.level({level}).then(res=>{
+                        this.vehicleData = res.data.vehicle;
+                        this.paging = false;
+                    })
                 }
-                // console.log(e)
-                let level = e;
-                // console.log(level)
-                vehicleModel.level({level}).then(res=>{
-                    this.vehicleData = res.data.vehicle;
-                })
             },
             
 
@@ -246,6 +249,7 @@
                     this.pagination.currentPage = Number(res.data.pagination.current_page);
                     this.pagination.total = Number(res.data.pagination.total);
                 })
+                this.paging = true;
             },
             handleOnPreview(file) {
                 window.open(file.url);
