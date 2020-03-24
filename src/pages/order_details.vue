@@ -220,7 +220,13 @@
                 let order_state = this.order_state;
                 let car_id = this.orderData.car_id;
                 let get_car = this.orderData.get_car;
-                // console.log(get_car)
+                if(order_state == '请选择状态'){
+                        this.$message({
+                        type: 'info',
+                        message: '请选择订单状态!'
+                        });
+                        return
+                }
                 if(this.orderData.get_car == 2 && order_state == 3){
                     this.$message({
                     type: 'info',
