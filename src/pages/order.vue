@@ -3,8 +3,8 @@
         <div class="pg-main-header">
 		<div class="page-input">
 			<el-input class="page-input-item" v-model="seekInput" placeholder="请输入手机号码"></el-input>
-			<el-button class="page-input-button" type="primary" @click="seekButton">搜索</el-button>
-			<el-button type="primary" class="btn" @click="getData">取消</el-button>
+			<el-button class="page-input-button" type="primary"  @click="seekButton">搜索</el-button>
+			<el-button type="primary" class="btn" v-show="getData_lock" @click="getData">取消</el-button>
 		</div>
         <el-button type="primary" @click="handleAddUser">添加订单</el-button>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
@@ -160,6 +160,7 @@
 				iscar_id:'',//编辑车辆 原来车辆的id
 				user_id:'',//用户id
 				order_results:true,
+				getData_lock:false,
 				labelPosition:'right',
 				
 			}
@@ -182,6 +183,7 @@
 				orderModel.orderFind(phone).then(res=>{
 					this.orderData = res.data;
 				})
+				this.getData_lock = true;
 			},
 			getData() {
 				let params = {
@@ -197,6 +199,7 @@
 					this.pagination.total = Number(res.data.pagination.total);
 				})
 				this.seekInput = '';
+				this.getData_lock = false;
 			},
 			getVehicle(){
 				vehicleModel.list().then(res => {
