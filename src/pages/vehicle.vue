@@ -12,7 +12,7 @@
             <el-radio-button label="5">6至15座商务车</el-radio-button>
 		</el-radio-group>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
-          <el-form class="handEdit">
+          <el-form class="handEdit" :label-position="labelPosition">
             <el-form-item label="车名" label-width="60px">
               <el-input class="input-text" name="car_name" width="200" v-model="formBoxValue.car_name"></el-input>
             </el-form-item>
@@ -63,7 +63,8 @@
 
           <el-form v-if="formBoxCost">
             <div style="font-size: 18px;color: #303133;margin-bottom: 10px;">添加费用项(必填)</div>
-             <el-form-item style="width:42%;" label="价格" label-width="60px">
+            
+            <el-form-item style="width:42%;" label="价格" label-width="60px">
               <el-input class="input-text cost" name="price" width="200" v-model="formBoxValue.price"></el-input>
             </el-form-item>
             <el-form-item style="width:42%;" label="保险费" label-width="60px">
@@ -71,7 +72,7 @@
             </el-form-item> 
            
             
-            <el-form-item style="width:42%;" label="整备费" label-width="60px">
+            <el-form-item style="width:39%;" label="整备费" label-width="60px">
               <el-input class="input-text cost" name="cost_servic" width="100" v-model="formBoxValue.cost_servic"></el-input>
             </el-form-item>
             <el-form-item style="width:42%;" label="基础服务费" label-width="90px">
@@ -178,7 +179,8 @@
     export default {
         data() {
             return{
-                radio1: 'vehicle',			
+                radio1: 'vehicle',	
+                labelPosition:'right ',		
                 fileList:[],
                 car_img:'',
                 vehicleData:[],

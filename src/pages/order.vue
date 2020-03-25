@@ -8,19 +8,22 @@
 		</div>
         <el-button type="primary" @click="handleAddUser">添加订单</el-button>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
-          <el-form  :model="formBoxValue" :rules="Rules">
-            <el-form-item label="姓名" label-width="60px">
+          <el-form  :model="formBoxValue" :rules="Rules" :label-position="labelPosition">
+            <el-form-item label="姓名" label-width="70px">
               <el-input name="name" width="200" v-model="formBoxValue.name"></el-input>
             </el-form-item>
-            <el-form-item label="手机" label-width="60px" prop="phone">
+			<br>
+            <el-form-item label="手机" label-width="70px" prop="phone">
 				<el-input type="text" v-model="formBoxValue.phone" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="车型" label-width="60px">
+			<br>
+            <el-form-item label="车型" label-width="70px">
                 <el-select v-model="formBoxValue.car_id" @change="hadnSelect">
                   <el-option v-for="item in vehicleDate" :label="item.car_name" :value="item.id"/>
                 </el-select>
             </el-form-item>
-            <el-form-item label="租借日期" label-width="90px">
+			<br>
+            <el-form-item label="租借日期" label-width="70px">
                 <div class="block">
                     <el-date-picker
                     v-model="formBoxValue.data"
@@ -157,6 +160,7 @@
 				iscar_id:'',//编辑车辆 原来车辆的id
 				user_id:'',//用户id
 				order_results:true,
+				labelPosition:'right',
 				
 			}
     	},
@@ -168,8 +172,14 @@
     	methods: {
 			seekButton() {
 				let phone = this.seekInput;
+				if(phone == ''){
+					this.$message({
+						type: 'info',
+						message: '没有搜索号码'
+					});
+					return
+				}
 				orderModel.orderFind(phone).then(res=>{
-					// console.log(res)
 					this.orderData = res.data;
 				})
 			},
@@ -178,11 +188,9 @@
 					current_page: this.pagination.currentPage,
 					page_size: this.pagination.pageSize,
 				};
-				// console.log(params)
 				orderModel
 					.list(params)
 					.then(res => {
-					// console.log(res)
 					this.orderData = res.data.datas;
 					this.pagination.pageSize = Number(res.data.pagination.page_size);
 					this.pagination.currentPage = Number(res.data.pagination.current_page);
