@@ -1,12 +1,28 @@
 <template>
     <Layout>
         <div class="pg-main-header">
+		<el-button type="primary" @click="handleAddUser">添加订单</el-button>
 		<div class="page-input">
+			<div class="page-input-title">搜索订单</div>
 			<el-input class="page-input-item" v-model="seekInput" placeholder="请输入手机号码"></el-input>
 			<el-button class="page-input-button" type="primary"  @click="seekButton">搜索</el-button>
 			<el-button type="primary" class="btn" v-show="getData_lock" @click="getData">取消</el-button>
 		</div>
-        <el-button type="primary" @click="handleAddUser">添加订单</el-button>
+        
+        
+		<el-radio-group v-model="radio1" @change="choose">
+            <el-radio-button label="0">全部订单</el-radio-button>
+			<el-radio-button label="1" value="1">
+				<div @click="chooseeee" data-state="1">进行中</div>
+			</el-radio-button>
+			<el-radio-button label="2" value="2">
+				<div @click="chooseeee" data-state="2">已完成</div>
+			</el-radio-button>
+            <el-radio-button label="3" value="3">
+				<div @click="chooseeee" data-state="3">已取消</div>
+			</el-radio-button>
+           
+		</el-radio-group>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form  :model="formBoxValue" :rules="Rules" :label-position="labelPosition">
             <el-form-item label="姓名" label-width="70px">
@@ -98,7 +114,9 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-pagination
+		
+     	<el-pagination
+	      v-show="get_order"
           v-if="pagination.total > pagination.pageSize"
           background
           layout="prev, pager, next"
@@ -108,6 +126,22 @@
           @current-change="getData"
         >
       </el-pagination>
+
+	  <el-pagination
+	      v-show="get_orderState"
+          v-if="orderState_pagination.total > orderState_pagination.pageSize"
+          layout="prev, pager, next"
+          :current-page.sync="orderState_pagination.currentPage"
+          :page-size="orderState_pagination.pageSize"
+          :total="orderState_pagination.total"
+          @current-change="choose"
+        >
+      </el-pagination>
+	  
+
+	
+
+	 
     </Layout>
 
 </template>
@@ -155,13 +189,23 @@
 					total: 0,
 					currentPage: 1,
 					pageSize: 10
-				},  
+				},
+				orderState_pagination: {
+					total: 0,
+					currentPage: 1,
+					pageSize: 10
+				},
+			
 				seekInput:'',//查找
 				iscar_id:'',//编辑车辆 原来车辆的id
 				user_id:'',//用户id
 				order_results:true,
 				getData_lock:false,
 				labelPosition:'right',
+				radio1:'0',
+				get_order:true,
+				get_orderState:false,
+				order_state:'',
 				
 			}
     	},
@@ -185,11 +229,46 @@
 				})
 				this.getData_lock = true;
 			},
+			chooseeee(e){
+				// console.log(e.currentTarget.dataset.state)
+				this.order_state = e.currentTarget.dataset.state
+			},
+			choose(e) {
+				this.get_orderState = true;
+				if(e == '0'){
+                    this.getData();
+                }else if(e !== '0'){
+                    // let order_state = e;
+					// console.log(e,'e')
+					let params = {
+						current_page: this.orderState_pagination.currentPage,
+						page_size: this.orderState_pagination.pageSize,
+						order_state:this.order_state,
+					};
+					console.log(params)
+                    orderModel
+					.list(params)
+					.then(res=>{
+                        this.orderData = res.data.datasi.order_state;
+						// console.log(res.data.datasi)
+						this.orderState_pagination.pageSize = Number(res.data.datasi.orderState_pagination.page_size);
+						this.orderState_pagination.currentPage = Number(res.data.datasi.orderState_pagination.current_page);
+						this.orderState_pagination.total = Number(res.data.datasi.orderState_pagination.total);
+						
+                    })
+					
+					this.get_order=false;
+					
+                }
+			},
 			getData() {
+				console.log(456)
 				let params = {
 					current_page: this.pagination.currentPage,
 					page_size: this.pagination.pageSize,
+					order_state:0,
 				};
+				
 				orderModel
 					.list(params)
 					.then(res => {
@@ -200,10 +279,11 @@
 				})
 				this.seekInput = '';
 				this.getData_lock = false;
+				this.get_order = true;
+				this.get_orderState = false;
 			},
 			getVehicle(){
 				vehicleModel.list().then(res => {
-				// console.log(res)
 				this.vehicleDate = res.data.vehicleFree;
 				})
 			},
@@ -391,7 +471,13 @@
       width:194px;
   }
   .page-input{
-	  margin-bottom:20px;
+	  margin-top:20px;
+	  .page-input-title{
+		  display:inline-block;
+		  color: #909399;
+		  font-size:15px;
+		  margin-right:15px;
+	  }
 	  .page-input-item{
 		  display:inline-block;
 		  width:300px;

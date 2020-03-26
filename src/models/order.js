@@ -9,7 +9,7 @@ export default {
         localStorage.clear()
     },
     list(params) {
-        return request.get(API.order, params)
+        return request.post(API.order, params)
     },
     show(id) {
         return request.get(API.orderItem(id));
