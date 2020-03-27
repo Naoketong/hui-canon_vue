@@ -16,11 +16,9 @@
             prop="order_state"
             label="订单状态">
             <template slot-scope="scope" >
-                <el-tag :type="scope.row.order_state === 1 ? 'danger' : ''">
-                {{ scope.row.order_state === 1 ? "进行中" : "" }}
-                {{ scope.row.order_state === 2 ? "已完成" : "" }}
-                {{ scope.row.order_state === 3 ? "已取消" : "" }}
-                </el-tag>
+                <el-tag v-if="scope.row.order_state == 1" type="danger">进行中</el-tag>
+                <el-tag v-if="scope.row.order_state == 2" type="success">已完成</el-tag>
+                <el-tag v-if="scope.row.order_state == 3" type="info">已取消</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -41,14 +39,20 @@
             prop="phone"
             label="电话">
           </el-table-column>
+          <el-table-column
+            prop="car_name"
+            label="租借车辆">
+          </el-table-column>
           
           <el-table-column
             prop="operation"
             label="操作">
             <template slot-scope="scope">
               <el-button  type="text" icon="el-icon-s-order" @click="handledetails(scope.row,scope.$index)">查看详情</el-button>
-              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
-              <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
+              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)" 
+			        v-show="scope.row.order_state == 1 && scope.row.get_car === 1">编辑</el-button>
+              <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)"
+			        v-show="scope.row.order_state == 2 || scope.row.order_state === 3">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -67,7 +71,7 @@
 		// inject:["reload"],
     	data () {
 			return {
-                user_orderData:[],
+        user_orderData:[],
 				
 			}
     	},
@@ -76,7 +80,7 @@
           userModel.show(id).then(res => {
 				if(res.data[0].id !== null){
 					this.user_orderData = res.data;
-					// console.log(this.user_orderData)
+					console.log(this.user_orderData)
 				}
                 
             });

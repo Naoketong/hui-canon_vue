@@ -11,14 +11,14 @@
         
         
 		<el-radio-group v-model="radio1" @change="choose">
-            <el-radio-button label="0">全部订单</el-radio-button>
-			<el-radio-button label="1" value="1">
+            <el-radio-button label="orderAll">全部订单</el-radio-button>
+			<el-radio-button label="1">
 				<div @click="chooseeee" data-state="1">进行中</div>
 			</el-radio-button>
-			<el-radio-button label="2" value="2">
+			<el-radio-button label="2">
 				<div @click="chooseeee" data-state="2">已完成</div>
 			</el-radio-button>
-            <el-radio-button label="3" value="3">
+            <el-radio-button label="3">
 				<div @click="chooseeee" data-state="3">已取消</div>
 			</el-radio-button>
            
@@ -75,11 +75,9 @@
             prop="order_state"
             label="订单状态">
             <template slot-scope="scope" >
-                <el-tag :type="scope.row.order_state === 1 ? 'danger' : ''">
-                {{ scope.row.order_state === 1 ? "进行中" : "" }}
-                {{ scope.row.order_state === 2 ? "已完成" : "" }}
-                {{ scope.row.order_state === 3 ? "已取消" : "" }}
-                </el-tag>
+				<el-tag v-if="scope.row.order_state == 1" type="danger">进行中</el-tag>
+				<el-tag v-if="scope.row.order_state == 2" type="success">已完成</el-tag>
+				<el-tag v-if="scope.row.order_state == 3" type="info">已取消</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -100,7 +98,6 @@
             prop="phone"
             label="电话">
           </el-table-column>
-          
           <el-table-column
             prop="operation"
             label="操作">
@@ -136,12 +133,7 @@
           :total="orderState_pagination.total"
           @current-change="choose"
         >
-      </el-pagination>
-	  
-
-	
-
-	 
+      </el-pagination>	 
     </Layout>
 
 </template>
@@ -202,7 +194,7 @@
 				order_results:true,
 				getData_lock:false,
 				labelPosition:'right',
-				radio1:'0',
+				radio1:'orderAll',
 				get_order:true,
 				get_orderState:false,
 				order_state:'',
@@ -235,11 +227,9 @@
 			},
 			choose(e) {
 				this.get_orderState = true;
-				if(e == '0'){
+				if(e == 'orderAll'){
                     this.getData();
-                }else if(e !== '0'){
-                    // let order_state = e;
-					// console.log(e,'e')
+                }else if(e !== 'orderAll'){
 					let params = {
 						current_page: this.orderState_pagination.currentPage,
 						page_size: this.orderState_pagination.pageSize,
@@ -250,7 +240,6 @@
 					.list(params)
 					.then(res=>{
                         this.orderData = res.data.datasi.order_state;
-						// console.log(res.data.datasi)
 						this.orderState_pagination.pageSize = Number(res.data.datasi.orderState_pagination.page_size);
 						this.orderState_pagination.currentPage = Number(res.data.datasi.orderState_pagination.current_page);
 						this.orderState_pagination.total = Number(res.data.datasi.orderState_pagination.total);
@@ -262,7 +251,6 @@
                 }
 			},
 			getData() {
-				console.log(456)
 				let params = {
 					current_page: this.pagination.currentPage,
 					page_size: this.pagination.pageSize,
@@ -327,7 +315,6 @@
 				this.formBoxValue.data = data.data;
 				this.formBoxShow = true;
 				this.dataIndex = index
-				//   console.log(this.formBoxValue.car_id,'比较')
 				let id = this.formBoxValue.car_id;
 				costModel.show(id).then( res => {
 					this.costData.cost_total = res.data[0].cost_total;
@@ -369,9 +356,7 @@
 					return
 				}
 				let total = this.costData.cost_total;//除租赁费以外的总费用
-				// console.log(total)
 				let price = this.formBoxValue.price;//车辆租赁费/天
-				// console.log(this.vehicleDate)
 				let cost_total = Number(price) * Number(rent_days) + Number(total)
 
 				// console.log(this.costData)
