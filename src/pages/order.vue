@@ -272,27 +272,21 @@
 			},
 			orderState_pages(e){
 				this.get_orderState = true;
-				this.order_state = e;
-				console.log(this.order_state)
-				if(e == 'orderAll'){
-                    this.getData();
-                }else if(e !== 'orderAll'){
-					let params = {
-						current_page: this.orderState_pagination.currentPage,
-						page_size: this.orderState_pagination.pageSize,
-						order_state:e,
-					};
-					console.log(params)
-                    orderModel
-					.state(params)
-					.then(res=>{
-                        this.orderData = res.data.datas.order_state;
-						this.orderState_pagination.pageSize = Number(res.data.datas.orderState_pagination.page_size);
-						this.orderState_pagination.currentPage = Number(res.data.datas.orderState_pagination.current_page);
-						this.orderState_pagination.total = Number(res.data.datas.orderState_pagination.total);
-                    })
-					this.get_order=false;
-                }
+				let params = {
+					current_page: this.orderState_pagination.currentPage,
+					page_size: this.orderState_pagination.pageSize,
+					order_state:e,
+				};
+				console.log(params)
+                orderModel
+				.state(params)
+				.then(res=>{
+                    this.orderData = res.data.datas.order_state;
+					this.orderState_pagination.pageSize = Number(res.data.datas.orderState_pagination.page_size);
+					this.orderState_pagination.currentPage = Number(res.data.datas.orderState_pagination.current_page);
+					this.orderState_pagination.total = Number(res.data.datas.orderState_pagination.total);
+                })
+				this.get_order=false;
 			},
 			getVehicle(){
 				vehicleModel.list().then(res => {
