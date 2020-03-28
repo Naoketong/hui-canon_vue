@@ -15,6 +15,7 @@ export default {
     orderFind: (id) => `${PREFIX}/order/phone/${id}`,
     costItem: (id) => `${PREFIX}/cost/${id}`,
     order: PREFIX + '/order',
+    orderState: PREFIX + '/order/state',
     orderItem: (id) => `${PREFIX}/order/${id}`,
     orderModify: (id) => `${PREFIX}/order/modify/${id}`,
 
