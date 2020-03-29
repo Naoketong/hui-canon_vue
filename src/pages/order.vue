@@ -12,15 +12,9 @@
         
 		<el-radio-group v-model="radio1" @change="choose">
             <el-radio-button label="orderAll">全部订单</el-radio-button>
-			<el-radio-button label="1">进行中
-				<!--<div @click="choose_state" data-state="1"></div>-->
-			</el-radio-button>
-			<el-radio-button label="2">已完成
-				<!--<div @click="choose_state"  data-state="2"></div>-->
-			</el-radio-button>
-            <el-radio-button  label="3">已取消
-				<!--<div @click="choose_state"  data-state="3"></div>-->
-			</el-radio-button>  
+			<el-radio-button label="1">进行中</el-radio-button>
+			<el-radio-button label="2">已完成</el-radio-button>
+            <el-radio-button label="3">已取消</el-radio-button>  
 		</el-radio-group>
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form  :model="formBoxValue" :rules="Rules" :label-position="labelPosition">
@@ -200,7 +194,6 @@
     	created () {
     	  this.getData();
     	  this.getVehicle();
-    	  
     	},
     	methods: {
 			seekButton() {
@@ -224,7 +217,6 @@
 				if(this.orderState_pagination.currentPage !== 1){
 					this.orderState_pagination.currentPage = 1
 				}
-				console.log(this.order_state)
 				if(e == 'orderAll'){
                     this.getData();
                 }else if(e !== 'orderAll'){
@@ -233,7 +225,6 @@
 						page_size: this.orderState_pagination.pageSize,
 						order_state:e,
 					};
-					console.log(params)
                     orderModel
 					.state(params)
 					.then(res=>{
@@ -257,6 +248,7 @@
 					.list(params)
 					.then(res => {
 					this.orderData = res.data.datas;
+					console.log(this.orderData)
 					this.pagination.pageSize = Number(res.data.pagination.page_size);
 					this.pagination.currentPage = Number(res.data.pagination.current_page);
 					this.pagination.total = Number(res.data.pagination.total);
@@ -277,7 +269,6 @@
 					page_size: this.orderState_pagination.pageSize,
 					order_state:e,
 				};
-				console.log(params)
                 orderModel
 				.state(params)
 				.then(res=>{
@@ -290,7 +281,7 @@
 			},
 			getVehicle(){
 				vehicleModel.list().then(res => {
-				this.vehicleDate = res.data.vehicleFree;
+					this.vehicleDate = res.data.vehicleFree;
 				})
 			},
 			hadnSelect(){

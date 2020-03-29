@@ -4,11 +4,7 @@
         <!--<el-button type="primary" @click="handleAddUser">添加费用项</el-button>-->
         <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
           <el-form >
-          	<!--<el-form-item label="车型" label-width="60px">
-                <el-select v-model="formBoxValue.car_id">
-                  <el-option v-for="item in vehicleDate" :label="item.car_name" :value="item.id" />
-                </el-select>
-            </el-form-item>-->
+          	
 			<el-form-item label="租赁费（天）" label-width="100px">
               <el-input name="price" width="100" v-model="formBoxValue.price"></el-input>
             </el-form-item><br>
@@ -95,6 +91,16 @@
           </el-table-column>
         </el-table>
       </div>
+	  <el-pagination
+          v-if="pagination.total > pagination.pageSize"
+          background
+          layout="prev, pager, next"
+          :current-page.sync="pagination.currentPage"
+          :page-size="pagination.pageSize"
+          :total="pagination.total"
+          @current-change="getData"
+        >
+      </el-pagination>
     </Layout>
 
 </template>
@@ -120,21 +126,35 @@
                     cost_insurance: '',
                     price: '',
                 },
+				pagination: {
+					total: 0,
+					currentPage: 1,
+					pageSize: 10
+				},
                 
             }
         },
         created () {
-            costModel.list().then( res => {
-                this.costData = res.data;
-                // console.log(this.costData)
-            });
-            // vehicleModel.list().then(res => {
-            //     this.vehicleDate = res.vehicle;
-            //     // console.log(this.vehicleDate)
-            // })
-            
+			this.getData();			           
         },
         methods: {
+			getData(){
+				let params = {
+					current_page: this.pagination.currentPage,
+					page_size: this.pagination.pageSize,
+					order_state:0,
+				};
+				
+				costModel
+					.list(params)
+					.then(res => {
+						console.log(res)
+					this.costData = res.data;
+					this.pagination.pageSize = Number(res.pagination.page_size);
+					this.pagination.currentPage = Number(res.pagination.current_page);
+					this.pagination.total = Number(res.pagination.total);
+				})
+			},
             // handleAddUser() {
             //     this.formBoxShow = true;
             //     this.formBoxTitle = '添加费用项';

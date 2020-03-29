@@ -1,7 +1,7 @@
 <template>
     <Layout>
         <div class="pg-main-header">
-			<el-button type="primary" @click="handleAddUser">添加用户</el-button>
+			<!--<el-button type="primary" @click="handleAddUser">添加用户</el-button>-->
 			<br>
 
 			<el-radio-group style="margin-top:20px;" v-model="radio1" @change="choose">
@@ -63,7 +63,7 @@
 				label="操作">
 				<template slot-scope="scope">
 				<el-button  type="text" icon="el-icon-user" @click="handledetails(scope.row,scope.$index)">查看订单</el-button>
-				<el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)" v-show="userEditShow">编辑</el-button>
+				<!--<el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)" v-show="userEditShow">编辑</el-button>-->
 				<el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -87,7 +87,7 @@
             dataIndex: null,
             formBoxID: null,
             formBoxShow: false,
-			userEditShow:true,
+			// userEditShow:true,
             formBoxTitle: '',
             formBoxValue: {
                 name: '',
@@ -119,14 +119,14 @@
 				userModel.list().then( res => {
 					this.userData = res.data.userOnline;
 					if(res.data.userOnline[0].is_online === 1){
-						this.userEditShow = false ;
+						// this.userEditShow = false ;
 					}
 				});
 			}else{
 				userModel.list().then( res => {
 					this.userData = res.data.userOffline;
 					if(res.data.userOffline[0].is_online === 2){
-						this.userEditShow = true;
+						// this.userEditShow = true;
 					}
 				});
 			}

@@ -1,7 +1,7 @@
 <template>
     <Layout>
         <div class="pg-main-header">
-        <el-button type="primary" @click="handleAddUser">添加车型</el-button><br>
+        <el-button type="primary" @click="handleAddUser">添加车型以及费用</el-button><br>
         <el-radio-group style="margin-top:20px;" v-model="radio1" @change="choose">
             <el-radio-button label="vehicle">全部车型</el-radio-button>
 			<el-radio-button label="0">经济型</el-radio-button>
@@ -22,7 +22,6 @@
             <el-form-item label="结构" label-width="60px">
               <el-input class="input-text" name="car_structure" width="200" v-model="formBoxValue.car_structure"></el-input>
             </el-form-item>
-           
             <el-form-item label="级别" label-width="60px">          
                 <el-select v-model="formBoxValue.level">
                     <el-option label="经济型" :value="0" />
@@ -33,7 +32,6 @@
                     <el-option label="6至15座商务车" :value="5" />
                 </el-select>
             </el-form-item>
-            
             <el-form-item label="状态" label-width="60px">
                 <el-select v-model="formBoxValue.state">
                     <el-option label="空闲" :value="0" />
@@ -56,31 +54,23 @@
                     <el-button size="small" type="primary">点击上传</el-button>
                     <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                 </el-upload>
-                          
             </el-form-item>          
           </el-form>
-
-
           <el-form v-if="formBoxCost" :label-position="labelPosition">
-            <div style="font-size: 18px;color: #303133;margin-bottom: 10px;">添加费用项(必填)</div>
-            
+            <div style="font-size: 18px;color: #303133;margin-bottom: 10px;">添加费用项(必填)</div>            
             <el-form-item style="width:42%;" label="价格" label-width="60px">
               <el-input class="input-text cost" name="price" width="200" v-model="formBoxValue.price"></el-input>
             </el-form-item>
             <el-form-item style="width:42%;" label="保险费" label-width="60px">
               <el-input class="input-text cost" name="cost_insurance" width="100" v-model="formBoxValue.cost_insurance"></el-input>
-            </el-form-item> 
-           
-            
+            </el-form-item>             
             <el-form-item style="width:39%;" label="整备费" label-width="60px">
               <el-input class="input-text cost" name="cost_servic" width="100" v-model="formBoxValue.cost_servic"></el-input>
             </el-form-item>
             <el-form-item style="width:42%;" label="基础服务费" label-width="90px">
               <el-input class="input-text cost" name="cost_basis" width="100" v-model="formBoxValue.cost_basis"></el-input>
-            </el-form-item>
-                              
-          </el-form>
-          
+            </el-form-item>                              
+          </el-form>         
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="handleSave">保存</el-button>
             <el-button @click="handleCancel">取消</el-button>
@@ -143,7 +133,6 @@
             <template slot-scope="scope">
                 {{scope.row.price}}元
             </template>
-
           </el-table-column>
           <el-table-column
             prop="operation"
@@ -157,7 +146,6 @@
         </el-table>
       </div>
      <el-pagination
-
         v-show="paging"
         v-if="pagination.total > pagination.pageSize"
         background
@@ -169,8 +157,6 @@
         >
         </el-pagination>
     </Layout>
-  
-
 </template>
 <script>
     import Layout from '@/components/Layout'
@@ -196,11 +182,9 @@
                     car_displacement:'',
                     car_structure:'',
                     price:'',
-
                     cost_basis:'',
                     cost_servic:'',
                     cost_insurance:'',
-
                 },
                 formData:{
                     file_id:'',
@@ -214,9 +198,7 @@
                     currentPage: 1,
                     pageSize: 10
                 },
-                paging:false,
-                
-
+                paging:false,               
             }
         },
         created () {
@@ -234,8 +216,6 @@
                     })
                 }
             },
-            
-
             getData() {
                 let params = {
                     current_page: this.pagination.currentPage,
@@ -289,10 +269,6 @@
                 }
                 return true;          
             },
-
-
-
-
             handleAddUser() {
                 this.formBoxShow = true;
                 this.formBoxCost = true,
@@ -350,12 +326,9 @@
                 let car_displacement = this.formBoxValue.car_displacement;
                 let car_structure = this.formBoxValue.car_structure;
                 let price = this.formBoxValue.price;
-
                 let cost_basis = this.formBoxValue.cost_basis;
                 let cost_servic = this.formBoxValue.cost_servic;
                 let cost_insurance = this.formBoxValue.cost_insurance
-
-
                 // let params = { car_name, state, price, level, car_img, car_displacement, car_structure }
                 let params = {
                     car_name, 
