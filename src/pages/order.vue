@@ -209,6 +209,7 @@
 					this.orderData = res.data;
 				})
 				this.getData_lock = true;
+				this.get_order = false;
 			},
 			
 			choose(e) {

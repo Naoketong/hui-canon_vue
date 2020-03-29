@@ -57,6 +57,15 @@
 				prop="phone"
 				label="电话">
 			</el-table-column>
+      		<el-table-column
+				prop="is_online"
+				label="用户类型">
+        		<template slot-scope="scope" >
+					<el-tag v-if="scope.row.is_online == 1" >线上用户</el-tag>
+					<el-tag v-if="scope.row.is_online == 2" type="warning">线下用户</el-tag>
+				</template>
+			</el-table-column>
+      
 			
 			<el-table-column
 				prop="operation"

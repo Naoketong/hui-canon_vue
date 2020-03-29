@@ -148,7 +148,6 @@
 				costModel
 					.list(params)
 					.then(res => {
-						console.log(res)
 					this.costData = res.data;
 					this.pagination.pageSize = Number(res.pagination.page_size);
 					this.pagination.currentPage = Number(res.pagination.current_page);
