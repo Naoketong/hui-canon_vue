@@ -1,75 +1,73 @@
 <template>
-    <Layout>
-        <div class="pg-main-header">
-        <el-button type="primary" @click="handleAddUser">添加管理员</el-button>
-        <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
-          <el-form :model="formBoxValue" :rules="Rules">
-            <el-form-item label="姓名" label-width="60px">
-              <el-input
+  <Layout>
+    <div class="pg-main-header">
+      <el-button type="primary" @click="handleAddUser">添加管理员</el-button>
+      <el-dialog :title="formBoxTitle" :visible="formBoxShow" :show-close="false">
+        <el-form :model="formBoxValue" :rules="Rules">
+          <el-form-item label="姓名" label-width="60px">
+            <el-input
+                type="text"
+                prefix-icon="el-icon-user"
+                placeholder="请输入姓名"
+                v-model="formBoxValue.name"
+                autocomplete="off"
+              ></el-input>
+          </el-form-item>
+          <el-form-item label="手机" label-width="60px" prop="phone">
+            <el-input
+                type="text"
+                prefix-icon="el-icon-mobile-phone"
+                placeholder="请输手机号"
+                v-model="formBoxValue.phone"
+                autocomplete="off"
+              ></el-input>
+          </el-form-item>
+          
+          <el-form-item label="密码" label-width="60px">
+            <el-input
+                  class="flex-cell-bd"
                   type="text"
-                  prefix-icon="el-icon-user"
-                  placeholder="请输入姓名"
-                  v-model="formBoxValue.name"
+                  placeholder="请输入密码"
+                  v-model="formBoxValue.password"
                   autocomplete="off"
+                  prefix-icon="el-icon-mobile"
                 ></el-input>
-            </el-form-item>
-            <el-form-item label="手机" label-width="60px" prop="phone">
-              <!--<el-input name="phone" width="200" v-model="formBoxValue.phone"></el-input>-->
-              <el-input
-                  type="text"
-                  prefix-icon="el-icon-mobile-phone"
-                  placeholder="请输手机号"
-                  v-model="formBoxValue.phone"
-                  autocomplete="off"
-                ></el-input>
-            </el-form-item>
-            
-            <el-form-item label="密码" label-width="60px">
-              <!--<el-input type="password" name="password" width="200" v-model="formBoxValue.password"></el-input>-->
-              <el-input
-                    class="flex-cell-bd"
-                    type="text"
-                    placeholder="请输入密码"
-                    v-model="formBoxValue.password"
-                    autocomplete="off"
-                    prefix-icon="el-icon-mobile"
-                  ></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="handleSave">保存</el-button>
-            <el-button @click="handleCancel">取消</el-button>
-          </div>
-        </el-dialog>
-      </div>
-      <div class="pg-main-body">
-        <el-table
-          :data="userData"
-          size="small"
-          style="width: 100%">
-          <el-table-column
-            prop="id"
-            label="id">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="姓名">
-          </el-table-column>
-          <el-table-column
-            prop="phone"
-            label="电话">
-          </el-table-column>
-          <el-table-column
-            prop="operation"
-            label="操作">
-            <template slot-scope="scope">
-              <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
-              <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-    </Layout>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handleSave">保存</el-button>
+          <el-button @click="handleCancel">取消</el-button>
+        </div>
+      </el-dialog>
+    </div>
+    <div class="pg-main-body">
+      <el-table
+        :data="userData"
+        size="small"
+        style="width: 100%">
+        <el-table-column
+          prop="id"
+          label="id">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="姓名">
+        </el-table-column>
+        <el-table-column
+          prop="phone"
+          label="电话">
+        </el-table-column>
+        <el-table-column
+          prop="operation"
+          label="操作">
+          <template slot-scope="scope">
+            <el-button  type="text" icon="el-icon-edit" @click="handleEditUser(scope.row,scope.$index)">编辑</el-button>
+            <el-button  type="text" icon="el-icon-delete" @click="handleDelete(scope.row,scope.$index)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  </Layout>
 
 </template>
 <script>
@@ -98,14 +96,12 @@
             trigger: "blur"
           }
         ],
-        // code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
       },
     }
   },
   created () {
     userModel.list().then( res => {
       this.userData = res.data;
-      // console.log(this.userData)
     })
   },
   methods: {
@@ -165,7 +161,6 @@
       }else{
         userModel.add(params)
           .then(res => {
-            // console.log(res)
             if(res.code == 0){
               this.$message.info('添加失败，请检查电话是否相同');
             }
@@ -185,7 +180,6 @@
       
 		let isdeleted = 1;
 		let params = {isdeleted}
-		// console.log(params)
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

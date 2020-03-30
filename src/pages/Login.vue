@@ -2,12 +2,10 @@
   <div class="account-login-contaienr">
     <div class="account-login-bd">
       <div class="company-info-container">
-
         <span class="company-info-name">汇典出行</span>
       </div>
       <div class="company-info-desc">小具影响力的选择</div>
       <div class="account-login-mainer">
-  
         <div class="login-form-container">
           <div class="login-form-phone">
             <el-form
@@ -80,41 +78,37 @@ export default {
   },
   created(){
     let token = localStorage.getItem('token');
-    console.log(token)
     if(token != null){
-        this.$router.push({name: 'User'})
+      this.$router.push({name: 'User'})
     }
   },
   methods: {
     submitForm(formName) {
-        let password = this.smsFrom.password;
-        let phone = this.smsFrom.phone;
-        if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
-            this.$message.info('手机号码有误，请重填'); 
-            return ; 
-        } 
-        console.log(password,phone)
-        if(!phone || !password){
-            this.$message.info('请输入账号与密码');
-            return
-        } 
-        userModel.login({phone:phone,password:password}).then(res => {
-            if(res.code == 200){
-                localStorage.setItem('token',res.token);
-                this.$router.replace({ name: "User" })
-            }else{
-              this.$message.info('请输入正确账号和密码');
-              this.smsFrom.password =' ',
-              this.smsFrom.phone = ''
-              return
-            }
-        }).catch(err => {
-          console.log(err)
-            this.$message.info('服务器错误，请联系管理员');
-        })
+      let password = this.smsFrom.password;
+      let phone = this.smsFrom.phone;
+      if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
+        this.$message.info('手机号码有误，请重填'); 
+        return ; 
+      } 
+      if(!phone || !password){
+        this.$message.info('请输入账号与密码');
+        return
+      } 
+      userModel.login({phone:phone,password:password}).then(res => {
+        if(res.code == 200){
+            localStorage.setItem('token',res.token);
+            this.$router.replace({ name: "User" })
+        }else{
+          this.$message.info('请输入正确账号和密码');
+          this.smsFrom.password =' ',
+          this.smsFrom.phone = ''
+          return
+        }
+      }).catch(err => {
+        this.$message.info('服务器错误，请联系管理员');
+      })
     },
     login:function() {
-      
       user.login({phone:phone,password:password}).then(res => {
         if(res.data.code == 200){
           // localStorage.setItem('token',res.data.token);

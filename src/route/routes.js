@@ -18,38 +18,31 @@ export default [{
         path: '/admin',
         name: 'Login',
         component: Login,
-
     },
     {
         path: '/admin/user',
         name: 'User',
         component: User,
-
     },
     {
         path: '/admin/user/:id',
         name: 'User_details',
         component: User_details,
-
     },
-
     {
         path: '/admin/vehicle',
         name: 'Vehicle',
         component: Vehicle,
-
     },
     {
         path: '/admin/vehicle/:id',
         name: 'Vehicle_details',
         component: Vehicle_details,
-
     },
     {
         path: '/admin/over',
         name: 'Over',
         component: Over,
-
     },
     {
         path: '/admin/order',
