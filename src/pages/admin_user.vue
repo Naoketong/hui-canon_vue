@@ -6,32 +6,31 @@
         <el-form :model="formBoxValue" :rules="Rules">
           <el-form-item label="姓名" label-width="60px">
             <el-input
-                type="text"
-                prefix-icon="el-icon-user"
-                placeholder="请输入姓名"
-                v-model="formBoxValue.name"
-                autocomplete="off"
+              type="text"
+              prefix-icon="el-icon-user"
+              placeholder="请输入姓名"
+              v-model="formBoxValue.name"
+              autocomplete="off"
               ></el-input>
           </el-form-item>
           <el-form-item label="手机" label-width="60px" prop="phone">
             <el-input
-                type="text"
-                prefix-icon="el-icon-mobile-phone"
-                placeholder="请输手机号"
-                v-model="formBoxValue.phone"
-                autocomplete="off"
+              type="text"
+              prefix-icon="el-icon-mobile-phone"
+              placeholder="请输手机号"
+              v-model="formBoxValue.phone"
+              autocomplete="off"
               ></el-input>
           </el-form-item>
-          
           <el-form-item label="密码" label-width="60px">
             <el-input
-                  class="flex-cell-bd"
-                  type="text"
-                  placeholder="请输入密码"
-                  v-model="formBoxValue.password"
-                  autocomplete="off"
-                  prefix-icon="el-icon-mobile"
-                ></el-input>
+              class="flex-cell-bd"
+              type="text"
+              placeholder="请输入密码"
+              v-model="formBoxValue.password"
+              autocomplete="off"
+              prefix-icon="el-icon-mobile"
+            ></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -176,37 +175,34 @@
       }
     },
     handleDelete(data,index) {
-      
-      
-		let isdeleted = 1;
-		let params = {isdeleted}
+      let isdeleted = 1;
+      let params = {isdeleted}
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
-      .then(()=>{
-        
-        return userModel.delete(data.id)
-      })
-      .then(()=>{
-        this.userData.splice(index,1)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        .then(()=>{
+          return userModel.delete(data.id)
+        })
+        .then(()=>{
+          this.userData.splice(index,1)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
         });
-      })
-      .catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
+      }
+    },
+    components: {
+      Layout
     }
-  },
-  components: {
-    Layout
-  }
 }
 </script>
 <style lang="less">
@@ -214,10 +210,10 @@
     margin-top: 20px;
   }
   .el-form-item {
-      margin-bottom: 22px;
-      display: inline-block;
+    margin-bottom: 22px;
+    display: inline-block;
   }
   .input-text{
-      width:194px;
+    width:194px;
   }
 </style>
