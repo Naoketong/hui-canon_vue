@@ -15,15 +15,17 @@
 					<div class="form-text">订单号：<span>{{orderData.order_number}}</span></div>
 				</div>
 				<div class="form-item">
+					<div class="form-text">订单ID：<span>{{orderData.id}}</span></div>
+				</div>
+				<div class="form-item">
 					<div class="form-text">创建时间：<span>{{orderData.order_date}}</span></div>
 				</div>
 				<div class="form-item">
 					<div class="form-text">订单状态：
-						<el-tag :type="orderData.order_state === 1 ? 'danger' : ''">
-						{{ orderData.order_state === 1 ? "进行中" : "" }}
-						{{ orderData.order_state === 2 ? "已完成" : "" }}
-						{{ orderData.order_state === 3 ? "已取消" : "" }}
-						</el-tag>
+						<el-tag v-if="orderData.order_state == 1">进行中</el-tag>
+						<el-tag v-if="orderData.order_state == 2" type="success">已完成</el-tag>
+						<el-tag v-if="orderData.order_state == 3" type="info">已取消</el-tag>
+						<el-tag v-if="orderData.order_state == 4" type="danger">超时订单</el-tag>
 				</div>
 				</div>
 				<div class="form-item">
@@ -59,7 +61,11 @@
 						</el-select>
 						<a @click="handButton_car">确定</a>
 					</div>
-				</div>           
+				</div>      
+				<div class="form-item" v-if="orderData.order_state == 4">
+					<div class="form-text">超时天数：<span>{{orderData.timeout_days}}天</span></div>
+					<div class="form-text">费用叠加费用：<span>{{orderData.timeout_cost}}元</span></div>
+				</div>     
 			</div>
 			<div class="log-section">
 				<div class="form-item">
@@ -120,10 +126,14 @@
 					not_getCar:true,
 					order_results:true,
 					name:'',
+					price:'',
+					total_cost:'',
+					original_cost:'',
 				}
 			},
 			created() {
 				this.order();
+				this.order_timeout()
 			},
 			methods:{
 				order:function(){
@@ -131,6 +141,8 @@
 					orderModel.show(id).then(res => {
 						this.orderData = res.data[0];
 						this.name = res.data[0].name;
+						this.price = res.data[0].price;
+						this.total_cost = res.data[0].cost_total;
 						let id = res.data[0].car_id
 						costModel.show(id).then( res => {
 							this.costData = res.data[0];
@@ -145,6 +157,29 @@
 							this.not_getCar = false;
 						}
 					});
+				},
+				order_timeout(){
+					let date = new Date();
+					let year = date.getFullYear();
+					let month = date.getMonth() + 1;
+					let day = date.getDate();
+					let nowData = year + "-" + month + "-" + day;					
+					let id = this.$route.params.id;
+					orderModel.show(id).then(res => {
+						let aa = res.data[0];
+							let end_at = aa.end_at;
+							let d1 = new Date(end_at);
+							let d2 = new Date(nowData);
+							let cc= (d2 - d1) / (24 * 60 * 60 * 1000)
+							let timeout_days = Math.ceil(cc)//超时天数 向上取整
+							if(timeout_days > 1){
+								let id = this.orderData.order_number;
+								let timeout_cost = this.price * timeout_days
+								let cost_total = Number(this.total_cost) + Number(timeout_cost);
+								let order_state = 4;
+								orderModel.modify(id,{order_state,timeout_days,timeout_cost,cost_total})
+							}
+					})										
 				},
 				handButton_car: function(){
 					let id = this.orderData.order_number;
