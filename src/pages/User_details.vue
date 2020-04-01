@@ -16,7 +16,7 @@
             <el-tag v-if="scope.row.order_state == 1">进行中</el-tag>
             <el-tag v-if="scope.row.order_state == 2" type="success">已完成</el-tag>
             <el-tag v-if="scope.row.order_state == 3" type="info">已取消</el-tag>
-            <el-tag v-if="scope.row.order_state == 4" type="danger">超时订单</el-tag>
+            <el-tag v-if="scope.row.order_state == 4" type="danger">已超时</el-tag>
           </template>
         </el-table-column>
         <el-table-column
