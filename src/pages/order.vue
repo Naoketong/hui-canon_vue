@@ -133,350 +133,343 @@
 
  	export default {
 		inject:["reload"],
-    	data () {
-				return {
-					orderData: [],
-					vehicleDate:[],
-					costData: [],
-					dataIndex: null,
-					formBoxID: null,
-					formBoxShow: false,
-					formBoxTitle: '',
-					formBoxValue: {
-						name: '',
-						phone: '',
-						car_id: '',
-						data:[],
-						price:'',
-					},   
-					Rules: {
-					phone: [
-						{ required: true, message: "请输入手机号", trigger: "blur" },
-						{
-							pattern: /^1[3456789]\d{9}$/,
-							message: "目前只支持中国大陆的手机号码",
-							trigger: "blur"
-						}
-						],
-					},   
-					expireTimeOption: {
-						disabledDate(time) {
-							return time.getTime() < Date.now() - 8.64e7;   //禁用以前的日期，今天不禁用
-							// return date.getTime() <= Date.now();    //禁用今天以及以前的日期
-						}
-					},
-					pagination: {
-						total: 0,
-						currentPage: 1,
-						pageSize: 10
-					},
-					orderState_pagination: {
-						total: 0,
-						currentPage: 1,
-						pageSize: 10
-					},
-				
-					seekInput:'',//查找
-					iscar_id:'',//编辑车辆 原来车辆的id
-					user_id:'',//用户id
-					order_results:true,
-					getData_lock:false,
-					labelPosition:'right',
-					radio1:'orderAll',
-					get_order:true,
-					get_orderState:false,
-					order_state:'',
+		data () {
+			return {
+				orderData: [],
+				vehicleDate:[],
+				costData: [],
+				dataIndex: null,
+				formBoxID: null,
+				formBoxShow: false,
+				formBoxTitle: '',
+				formBoxValue: {
+					name: '',
+					phone: '',
+					car_id: '',
+					data:[],
+					price:'',
+				},   
+				Rules: {
+				phone: [
+					{ required: true, message: "请输入手机号", trigger: "blur" },
+					{
+						pattern: /^1[3456789]\d{9}$/,
+						message: "目前只支持中国大陆的手机号码",
+						trigger: "blur"
+					}
+					],
+				},   
+				expireTimeOption: {
+					disabledDate(time) {
+						return time.getTime() < Date.now() - 8.64e7;   //禁用以前的日期，今天不禁用
+						// return date.getTime() <= Date.now();    //禁用今天以及以前的日期
+					}
+				},
+				pagination: {
+					total: 0,
+					currentPage: 1,
+					pageSize: 10
+				},
+				orderState_pagination: {
+					total: 0,
+					currentPage: 1,
+					pageSize: 10
+				},
+			
+				seekInput:'',//查找
+				iscar_id:'',//编辑车辆 原来车辆的id
+				user_id:'',//用户id
+				order_results:true,
+				getData_lock:false,
+				labelPosition:'right',
+				radio1:'orderAll',
+				get_order:true,
+				get_orderState:false,
+				order_state:'',
+			}
+		},
+		created () {
+			this.getData();
+			this.getVehicle();
+			this.order_timeout()
+		},
+		methods: {
+			seekButton() {
+				let phone = this.seekInput;
+				if(phone == ''){
+					this.$message({
+						type: 'info',
+						message: '没有搜索号码'
+					});
+					return
 				}
-    	},
-    	created () {
-    	  this.getData();
-    	  this.getVehicle();
-				this.order_timeout()
-    	},
-    	methods: {
-				seekButton() {
-					let phone = this.seekInput;
-					if(phone == ''){
-						this.$message({
-							type: 'info',
-							message: '没有搜索号码'
-						});
-						return
-					}
-					orderModel.orderFind(phone).then(res=>{
-						this.orderData = res.data;
-					})
-					this.getData_lock = true;
-					this.get_order = false;
-				},
-				
-				choose(e) {
-					this.get_orderState = true;
-					this.order_state = e;
-					if(this.orderState_pagination.currentPage !== 1){
-						this.orderState_pagination.currentPage = 1
-					}
-					if(e == 'orderAll'){
-						this.getData();
-					}else if(e !== 'orderAll'){
-						let params = {
-							current_page: this.orderState_pagination.currentPage,
-							page_size: this.orderState_pagination.pageSize,
-							order_state:e,
-						};
-						orderModel
-							.state(params)
-							.then(res=>{
-								this.orderData = res.data.datas.order_state;
-								this.orderState_pagination.pageSize = Number(res.data.datas.orderState_pagination.page_size);
-								this.orderState_pagination.currentPage = Number(res.data.datas.orderState_pagination.current_page);
-								this.orderState_pagination.total = Number(res.data.datas.orderState_pagination.total);
-							})
-						this.get_order=false;
-					}
-				},
-				getData(e) {
-					let params = {
-						current_page: this.pagination.currentPage,
-						page_size: this.pagination.pageSize,
-						order_state:0,
-					};
-					orderModel
-						.list(params)
-						.then(res => {
-							this.orderData = res.data.datas;
-							this.pagination.pageSize = Number(res.data.pagination.page_size);
-							this.pagination.currentPage = Number(res.data.pagination.current_page);
-							this.pagination.total = Number(res.data.pagination.total);
-						})
-					this.seekInput = '';
-					this.getData_lock = false;
-					this.get_order = true;
-					this.get_orderState = false;
-				},
-				orderState_page(e){
-					this.orderState_pagination.currentPage = e
-					this.orderState_pages(this.order_state)
-				},
-				orderState_pages(e){
-					this.get_orderState = true;
+				orderModel.orderFind(phone).then(res=>{
+					this.orderData = res.data;
+				})
+				this.getData_lock = true;
+				this.get_order = false;
+			},
+			choose(e) {
+				this.get_orderState = true;
+				this.order_state = e;
+				if(this.orderState_pagination.currentPage !== 1){
+					this.orderState_pagination.currentPage = 1
+				}
+				if(e == 'orderAll'){
+					this.getData();
+				}else if(e !== 'orderAll'){
 					let params = {
 						current_page: this.orderState_pagination.currentPage,
 						page_size: this.orderState_pagination.pageSize,
 						order_state:e,
 					};
 					orderModel
-					.state(params)
-					.then(res=>{
-						this.orderData = res.data.datas.order_state;
-						this.orderState_pagination.pageSize = Number(res.data.datas.orderState_pagination.page_size);
-						this.orderState_pagination.currentPage = Number(res.data.datas.orderState_pagination.current_page);
-						this.orderState_pagination.total = Number(res.data.datas.orderState_pagination.total);
-					})
+						.state(params)
+						.then(res=>{
+							this.orderData = res.data.datas.order_state;
+							this.orderState_pagination.pageSize = Number(res.data.datas.orderState_pagination.page_size);
+							this.orderState_pagination.currentPage = Number(res.data.datas.orderState_pagination.current_page);
+							this.orderState_pagination.total = Number(res.data.datas.orderState_pagination.total);
+						})
 					this.get_order=false;
-				},
-				getVehicle(){
-					vehicleModel.list().then(res => {
-						this.vehicleDate = res.data.vehicleFree;
+				}
+			},
+			getData(e) {
+				let params = {
+					current_page: this.pagination.currentPage,
+					page_size: this.pagination.pageSize,
+					order_state:0,
+				};
+				orderModel
+					.list(params)
+					.then(res => {
+						this.orderData = res.data.datas;
+						this.pagination.pageSize = Number(res.data.pagination.page_size);
+						this.pagination.currentPage = Number(res.data.pagination.current_page);
+						this.pagination.total = Number(res.data.pagination.total);
 					})
-				},
-				hadnSelect(){
-					let id = this.formBoxValue.car_id;
-					costModel.show(id).then( res => {
-						this.costData = res.data[0]
+				this.seekInput = '';
+				this.getData_lock = false;
+				this.get_order = true;
+				this.get_orderState = false;
+			},
+			orderState_page(e){
+				this.orderState_pagination.currentPage = e
+				this.orderState_pages(this.order_state)
+			},
+			orderState_pages(e){
+				this.get_orderState = true;
+				let params = {
+					current_page: this.orderState_pagination.currentPage,
+					page_size: this.orderState_pagination.pageSize,
+					order_state:e,
+				};
+				orderModel
+				.state(params)
+				.then(res=>{
+					this.orderData = res.data.datas.order_state;
+					this.orderState_pagination.pageSize = Number(res.data.datas.orderState_pagination.page_size);
+					this.orderState_pagination.currentPage = Number(res.data.datas.orderState_pagination.current_page);
+					this.orderState_pagination.total = Number(res.data.datas.orderState_pagination.total);
+				})
+				this.get_order=false;
+			},
+			getVehicle(){
+				vehicleModel.list().then(res => {
+					this.vehicleDate = res.data.vehicleFree;
+				})
+			},
+			hadnSelect(){
+				let id = this.formBoxValue.car_id;
+				costModel.show(id).then( res => {
+					this.costData = res.data[0]
+				})
+				vehicleModel.show(id).then(res => {
+				this.formBoxValue.price = res.data[0].price;
+				})
+			},
+			order_timeout(){
+				var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+				var year = currentDate.getFullYear()
+				var month = currentDate.getMonth() + 1
+				var day = currentDate.getDate()
+				let nowData = year + "-" + month + "-" + day;
+				let order_state = 1;
+				orderModel.state({order_state}).then(res=>{
+					let order_all = res.data.state_all;
+					let all = order_all.forEach((data)=>{
+						let end_at = data.end_at;
+						let d1 = new Date(end_at);
+						let d2 = new Date(nowData);
+						let d3 = (d2 - d1) / (24 * 60 * 60 * 1000)
+						let timeout_days = Math.ceil(d3);
+						let id = data.order_number;
+						if(timeout_days > 1){
+							// 执行修改代码
+							if(data.get_car == 2){
+								let timeout_cost = Number(data.price) * Number(timeout_days)
+								let cost_total = Number(data.cost_total) + timeout_cost;
+								let order_state = 4;
+								orderModel.modify(id,{order_state,timeout_days,timeout_cost,cost_total})
+							}else if(data.get_car == 1){
+								let order_state = 3;
+								orderModel.modify(id,{order_state})
+							}																
+						}							
 					})
-					vehicleModel.show(id).then(res => {
+				})																			
+			},
+			handleAddUser() {
+				this.formBoxShow = true;
+				this.formBoxTitle = '添加订单(仅添加线下订单)';
+				this.formBoxID = '';
+				this.formBoxValue.name = '';
+				this.formBoxValue.car_id = '';
+				this.formBoxValue.phone = '';
+				this.formBoxValue.data = '';
+			},
+			handleCancel() {
+				this.formBoxShow = false;
+				this.formBoxID = '';
+				this.formBoxValue.name = '';
+				this.formBoxValue.car_id = '';
+				this.formBoxValue.phone = '';
+				this.formBoxValue.data = '';
+			},
+			handleEditUser(data,index) {
+				this.formBoxTitle = '编辑订单';
+				this.formBoxID = data.id;
+				this.formBoxValue.name = data.name;
+				this.formBoxValue.car_id = data.car_id;
+				this.formBoxValue.phone = data.phone;
+				this.formBoxValue.data = data.data;
+				this.formBoxShow = true;
+				this.dataIndex = index
+				let id = this.formBoxValue.car_id;
+				costModel.show(id).then( res => {
+					this.costData.cost_total = res.data[0].cost_total;
+				})
+				vehicleModel.show(id).then(res => {
 					this.formBoxValue.price = res.data[0].price;
-					})
-				},
-				order_timeout(){
-					let date = new Date();
-					let year = date.getFullYear();
-					let month = date.getMonth() + 1;
-					let day = date.getDate();
-					let nowData = year + "-" + month + "-" + day;
-					
-					let order_state = 1;
-					orderModel.state({order_state}).then(res=>{
-						let order_all = res.data.state_all;
-						let all = order_all.forEach((data)=>{
-							let bb = data.end_at;
-							let d1 = new Date(bb);
-							let d2 = new Date(nowData);
-							let aa = (d2 - d1) / (24 * 60 * 60 * 1000)
-							// console.log(data,'全部')
-							if(aa > 0){
-								// 执行修改代码
-								// console.log(data,'大于0')
-								let id = data.order_number;
-								if(data.get_car == 2){
-									let order_state = 4;
-									orderModel.modify(id,{order_state})
-								}else if(data.get_car == 1){
-									let order_state = 3;
-									orderModel.modify(id,{order_state})
-								}
-								
-								
-							}
-							
-						})
-					})
-					
-					
-					
-					
-				},
-				handleAddUser() {
-					this.formBoxShow = true;
-					this.formBoxTitle = '添加订单(仅添加线下订单)';
-					this.formBoxID = '';
-					this.formBoxValue.name = '';
-					this.formBoxValue.car_id = '';
-					this.formBoxValue.phone = '';
-					this.formBoxValue.data = '';
-				},
-				handleCancel() {
-					this.formBoxShow = false;
-					this.formBoxID = '';
-					this.formBoxValue.name = '';
-					this.formBoxValue.car_id = '';
-					this.formBoxValue.phone = '';
-					this.formBoxValue.data = '';
-				},
-				handleEditUser(data,index) {
-					this.formBoxTitle = '编辑订单';
-					this.formBoxID = data.id;
-					this.formBoxValue.name = data.name;
-					this.formBoxValue.car_id = data.car_id;
-					this.formBoxValue.phone = data.phone;
-					this.formBoxValue.data = data.data;
-					this.formBoxShow = true;
-					this.dataIndex = index
-					let id = this.formBoxValue.car_id;
-					costModel.show(id).then( res => {
-						this.costData.cost_total = res.data[0].cost_total;
-					})
-					vehicleModel.show(id).then(res => {
-						this.formBoxValue.price = res.data[0].price;
-					})
-					orderModel.show(data.id).then(res=>{
-						this.iscar_id = res.data[0].car_id;
-					})				
-				},
-				handleSave() {
-					let order_number = ""; //订单号
-					for (let i = 0; i < 6; i++) //6位随机数，用以加在时间戳后面。
-					{
-						order_number += Math.floor(Math.random() * 10);
-					}
-					order_number = new Date().getTime() + order_number; //时间戳，用来生成订单号。
-					let id = this.formBoxID;
-					let index = this.dataIndex;
-					let name = this.formBoxValue.name;
-					let phone = this.formBoxValue.phone;
-					let car_id = this.formBoxValue.car_id;
-					if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
-					this.$message.info('手机号码有误，请重填'); 
-					return ; 
-					}         
-					/*租借开始结束时间和天数 */
-					let sat_at = this.formBoxValue.data[0];
-					let end_at = this.formBoxValue.data[1];
-					let d1 = new Date(sat_at);
-					let d2 = new Date(end_at);
-					let rent_days = (d2 - d1) / (24 * 60 * 60 * 1000)
-					if(!this.costData.cost_total){
-						this.$message.error('没有添加费用项，无法生成订单')
-						return
-					}
-					let total = this.costData.cost_total;//除租赁费以外的总费用
-					let price = this.formBoxValue.price;//车辆租赁费/天
-					let cost_total = Number(price) * Number(rent_days) + Number(total)
-					let params = {order_number, name, phone, car_id, sat_at, end_at, rent_days, cost_total }
-					let param = {name, phone, car_id, sat_at, end_at, rent_days, cost_total }
-					if(!order_number || !name || !phone || !car_id || !sat_at || !end_at || !rent_days || !cost_total){
-					this.$message.error('缺少必要参数')
+				})
+				orderModel.show(data.id).then(res=>{
+					this.iscar_id = res.data[0].car_id;
+				})				
+			},
+			handleSave() {
+				let order_number = ""; //订单号
+				for (let i = 0; i < 6; i++) //6位随机数，用以加在时间戳后面。
+				{
+					order_number += Math.floor(Math.random() * 10);
+				}
+				order_number = new Date().getTime() + order_number; //时间戳，用来生成订单号。
+				let id = this.formBoxID;
+				let index = this.dataIndex;
+				let name = this.formBoxValue.name;
+				let phone = this.formBoxValue.phone;
+				let car_id = this.formBoxValue.car_id;
+				if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))){ 
+				this.$message.info('手机号码有误，请重填'); 
+				return ; 
+				}         
+				/*租借开始结束时间和天数 */
+				let sat_at = this.formBoxValue.data[0];
+				let end_at = this.formBoxValue.data[1];
+				let d1 = new Date(sat_at);
+				let d2 = new Date(end_at);
+				let rent_days = (d2 - d1) / (24 * 60 * 60 * 1000)
+				if(!this.costData.cost_total){
+					this.$message.error('没有添加费用项，无法生成订单')
 					return
-					}
-					// 修改
-					if(id){
-						orderModel.update(id,param)
-							.then(() => {
-							this.orderData[index].name = name
-							this.orderData[index].phone = phone
-							this.orderData[index].car_id = car_id
-							this.formBoxShow = false;
-							this.$message.success('修改成功');
-								let id = this.iscar_id;
-								let state = 1;
-								vehicleModel.update(id,{state})
-							})
-							.catch(()=>{
-							this.formBoxShow = false;
-						})
-					// 添加
-					}else{
-						orderModel.add(params)
-						.then(res => {
-							let id = res.data.id;
-							params.id = id;
-							this.orderData.push(params)
-							this.formBoxShow = false;
-							this.$message.success('添加成功');
+				}
+				let total = this.costData.cost_total;//除租赁费以外的总费用
+				let price = this.formBoxValue.price;//车辆租赁费/天
+				let cost_total = Number(price) * Number(rent_days) + Number(total)
+				let params = {order_number, name, phone, car_id, sat_at, end_at, rent_days, cost_total }
+				let param = {name, phone, car_id, sat_at, end_at, rent_days, cost_total }
+				if(!order_number || !name || !phone || !car_id || !sat_at || !end_at || !rent_days || !cost_total){
+				this.$message.error('缺少必要参数')
+				return
+				}
+				// 修改
+				if(id){
+					orderModel.update(id,param)
+						.then(() => {
+						this.orderData[index].name = name
+						this.orderData[index].phone = phone
+						this.orderData[index].car_id = car_id
+						this.formBoxShow = false;
+						this.$message.success('修改成功');
+							let id = this.iscar_id;
+							let state = 1;
+							vehicleModel.update(id,{state})
 						})
 						.catch(()=>{
 						this.formBoxShow = false;
-						})
-						this.reload();
-					}
-				},
-				handleDelete(data,index) {
-					this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-						type: 'warning'
 					})
-					.then(()=>{
-						return orderModel.delete(data.id)
+				// 添加
+				}else{
+					orderModel.add(params)
+					.then(res => {
+						let id = res.data.id;
+						params.id = id;
+						this.orderData.push(params)
+						this.formBoxShow = false;
+						this.$message.success('添加成功');
 					})
-					.then(()=>{
-						this.orderData.splice(index,1)
-						this.$message({
-							type: 'success',
-							message: '删除成功!'
-						});
+					.catch(()=>{
+					this.formBoxShow = false;
 					})
-					.catch(() => {
-						this.$message({
-							type: 'info',
-							message: '已取消删除'
-						});
-					});
-				},
-				handledetails(row) {
-					const { id } = row;
-					this.$router.push({
-						name: "Order_details",
-						params: { id }
-					});
-				},
+					this.reload();
+				}
 			},
-			components: {
-				Layout
-			}
-    }
+			handleDelete(data,index) {
+				this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				})
+				.then(()=>{
+					return orderModel.delete(data.id)
+				})
+				.then(()=>{
+					this.orderData.splice(index,1)
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					});
+				})
+				.catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
+			},
+			handledetails(row) {
+				const { id } = row;
+				this.$router.push({
+					name: "Order_details",
+					params: { id }
+				});
+				this.reload()
+			},
+		},
+		components: {
+			Layout
+		}
+  }
 </script>
 <style lang="less">
   .pg-main-body{
     margin-top: 20px;
   }
   .el-form-item {
-      margin-bottom: 22px;
-      display: inline-block;
+		margin-bottom: 22px;
+		display: inline-block;
   }
   .input-text{
-      width:194px;
+		width:194px;
   }
   .page-input{
 	  margin-top:20px;

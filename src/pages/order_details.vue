@@ -133,7 +133,7 @@
 			},
 			created() {
 				this.order();
-				this.order_timeout()
+				// this.order_timeout()
 			},
 			methods:{
 				order:function(){
@@ -158,29 +158,32 @@
 						}
 					});
 				},
-				order_timeout(){
-					let date = new Date();
-					let year = date.getFullYear();
-					let month = date.getMonth() + 1;
-					let day = date.getDate();
-					let nowData = year + "-" + month + "-" + day;					
-					let id = this.$route.params.id;
-					orderModel.show(id).then(res => {
-						let aa = res.data[0];
-							let end_at = aa.end_at;
-							let d1 = new Date(end_at);
-							let d2 = new Date(nowData);
-							let cc= (d2 - d1) / (24 * 60 * 60 * 1000)
-							let timeout_days = Math.ceil(cc)//超时天数 向上取整
-							if(timeout_days > 1){
-								let id = this.orderData.order_number;
-								let timeout_cost = this.price * timeout_days
-								let cost_total = Number(this.total_cost) + Number(timeout_cost);
-								let order_state = 4;
-								orderModel.modify(id,{order_state,timeout_days,timeout_cost,cost_total})
-							}
-					})										
-				},
+				// order_timeout(){
+				// 	var currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+				// 	var year = currentDate.getFullYear()
+				// 	var month = currentDate.getMonth() + 1
+				// 	var day = currentDate.getDate()
+				// 	let nowData = year + "-" + month + "-" + day;
+									
+				// 	let id = this.$route.params.id;
+				// 	orderModel.show(id).then(res => {
+				// 		let order = res.data[0];
+				// 		let end_at = order.end_at;
+				// 		let d1 = new Date(end_at);
+				// 		let d2 = new Date(nowData);
+				// 		let days = (d2 - d1) / (24 * 60 * 60 * 1000)
+				// 		let timeout_days = Math.ceil(days)//超时天数 向上取整
+				// 		// console.log(days,timeout_days)
+				// 		if(timeout_days > 1){
+
+				// 			let id = this.orderData.order_number;
+				// 			let timeout_cost = this.price * timeout_days
+				// 			let cost_total = Number(this.total_cost) + Number(timeout_cost);
+				// 			let order_state = 4;
+				// 			orderModel.modify(id,{order_state,timeout_days,timeout_cost,cost_total})
+				// 		}
+				// 	})										
+				// },
 				handButton_car: function(){
 					let id = this.orderData.order_number;
 					let get_car = this.get_car;
@@ -191,7 +194,6 @@
 					})
 					.then(()=>{
 						return orderModel.modify(id,{get_car})
-							
 					})
 					.then(()=>{
 						this.$message({
